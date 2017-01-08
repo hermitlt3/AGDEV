@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\AnimationHelper.cpp" />
     <ClCompile Include="Source\Application.cpp" />
     <ClCompile Include="Source\Barrel.cpp" />
     <ClCompile Include="Source\Crate.cpp" />
@@ -47,6 +48,7 @@
     <ClCompile Include="Source\Windmill.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\AnimationHelper.h" />
     <ClInclude Include="Source\Application.h" />
     <ClInclude Include="Source\Barrel.h" />
     <ClInclude Include="Source\Crate.h" />

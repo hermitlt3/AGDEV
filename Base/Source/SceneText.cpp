@@ -23,6 +23,8 @@
 #include "SceneGraph\SceneGraph.h"
 #include "SpatialPartition\SpatialPartition.h"
 
+#include "SpriteAnimation.h"
+#include "AnimationHelper.h"
 #include "Windmill.h"
 #include "Barrel.h"
 #include "Sack.h"
@@ -230,6 +232,10 @@ void SceneText::Init()
 	MeshBuilder::GetInstance()->GetMesh("ZTorso")->textureID = LoadTGA("Image//Zombie.tga"); 
 	MeshBuilder::GetInstance()->GetMesh("ZHead")->textureID = LoadTGA("Image//Zombie.tga");
 	
+	MeshBuilder::GetInstance()->GenerateSpriteAnimation("GrenadeExplode", 3, 5);
+	MeshBuilder::GetInstance()->GetMesh("GrenadeExplode")->textureID = LoadTGA("Image//BOOM.tga");
+	Create::SAnimation("GrenadeExplode", 0, 14, 1, 2.f, false);
+
 	// Set up the Spatial Partition and pass it to the EntityManager to manage
 	CSpatialPartition::GetInstance()->Init(125, 125, 8, 8);
 	CSpatialPartition::GetInstance()->SetMesh("GRIDMESH");
@@ -295,6 +301,7 @@ void SceneText::Init()
 
 void SceneText::Update(double dt)
 {
+	AnimHelper::GetInstance()->UpdateAnimation(dt);
 	mill->Update(dt);
 	theEnemy->Update(dt);
 	// Update our entities
@@ -399,7 +406,11 @@ void SceneText::Render()
 	GraphicsManager::GetInstance()->SetPerspectiveProjection(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
 	GraphicsManager::GetInstance()->AttachCamera(&camera);
 	EntityManager::GetInstance()->Render();
-	
+
+	glEnable(GL_SAMPLE_ALPHA_TO_COVERAGE);
+	AnimHelper::GetInstance()->RenderAnimation();
+	glDisable(GL_SAMPLE_ALPHA_TO_COVERAGE);
+
 	// Setup 2D pipeline then render 2D
 	int halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2;
 	int halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2;

@@ -159,6 +159,9 @@
     <ClCompile Include="Source\SpriteAnimation.cpp">
       <Filter>Animation</Filter>
     </ClCompile>
+    <ClCompile Include="Source\AnimationHelper.cpp">
+      <Filter>Animation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -258,6 +261,9 @@
       <Filter>Enemy</Filter>
     </ClInclude>
     <ClInclude Include="Source\SpriteAnimation.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\AnimationHelper.h">
       <Filter>Animation</Filter>
     </ClInclude>
   </ItemGroup>

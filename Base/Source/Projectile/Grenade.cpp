@@ -9,6 +9,7 @@
 #include "MyMath.h"
 #include "../SpatialPartition/SpatialPartition.h"
 #include "../SceneGraph/SceneGraph.h"
+#include "../AnimationHelper.h"
 
 #include <iostream>
 using namespace std;
