@@ -4,6 +4,7 @@
 #include "GraphicsManager.h"
 #include "RenderHelper.h"
 #include "Physics.h"
+#include "SceneGraph\SceneGraph.h"
 
 GenericEntity::GenericEntity(Mesh* _modelMesh)
 	: modelMesh(_modelMesh)
@@ -42,6 +43,16 @@ void GenericEntity::SetAABB(Vector3 maxAABB, Vector3 minAABB)
 {
 	this->maxAABB = maxAABB;
 	this->minAABB = minAABB;
+}
+
+Mesh* GenericEntity::GetMesh()
+{
+	if (GetLODStatus() == true)
+	{
+		return GetLODMesh();
+	}
+	else
+		return modelMesh;
 }
 
 GenericEntity* Create::Entity(	const std::string& _meshName, 
