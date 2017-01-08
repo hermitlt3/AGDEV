@@ -67,7 +67,7 @@ void CPlayerInfo::Init(void)
 	// Set the laser blaster as the secondary weapon
 	//secondaryWeapon = new CLaserBlaster();
 	//secondaryWeapon->Init();
-	secondaryWeapon = new CPistol();
+	secondaryWeapon = new CGrenadeThrow();
 	secondaryWeapon->Init();
 }
 
@@ -309,7 +309,7 @@ void CPlayerInfo::Update(double dt)
 			position += rightUV * (float)m_dSpeed * (float)dt;
 		}
 		// Constrain the position
-		//Constrain();
+		Constrain();
 		// Update the target
 		target = position + viewVector;
 	}

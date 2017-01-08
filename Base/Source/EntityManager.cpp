@@ -26,7 +26,7 @@ void EntityManager::Update(double _dt)
 		theSpatialPartition->Update();
 
 	// Check for Collision amongst entities with collider properties
-	CheckForCollision();
+	CheckForCollision(_dt);
 
 	// Clean up entities that are done
 	it = entityList.begin();
@@ -343,7 +343,7 @@ bool EntityManager::CheckLineSegmentPlane(	Vector3 line_start, Vector3 line_end,
 }
 
 // Check if any Collider is colliding with another Collider
-bool EntityManager::CheckForCollision(void)
+bool EntityManager::CheckForCollision(double dt)
 {
 	for (std::list<EntityBase*>::iterator it = entityList.begin(); it != entityList.end(); ++it)
 	{
@@ -377,6 +377,7 @@ bool EntityManager::CheckForCollision(void)
 						thatMinAABB = (*it2)->GetPosition() + it2Collider->GetMinAABB();
 						thatMaxAABB = (*it2)->GetPosition() + it2Collider->GetMaxAABB();
 					}
+					Vector3 a;
 					if (CheckLineSegmentPlane(Laser->GetPosition(),
 						Laser->GetPosition() - Laser->GetDirection() * Laser->GetLength(),
 						thatMinAABB, thatMaxAABB,
@@ -391,7 +392,7 @@ bool EntityManager::CheckForCollision(void)
 				}
 			}
 		}
-
+		
 		else if ((*it)->HasCollider())
 		{
 			vector<EntityBase*> temp;
@@ -420,42 +421,29 @@ bool EntityManager::CheckForCollision(void)
 					continue;
 				if ((*it2)->HasCollider())
 				{
-					if (CheckSphereCollision(*it, *it2))
-					{
+					//if (CheckSphereCollision(*it, *it2))
+					//{
 						if (CheckAABBCollision(*it, *it2))
 						{
 							CProjectile* p = dynamic_cast<CProjectile*>(*it);
+							CCollider* c = dynamic_cast<CCollider*>(*it2);
 							if (p)
 							{
-								p->SetIsDone(true);
-								if (CSceneGraph::GetInstance()->GetNode(*it2) == nullptr)
-									(*it2)->SetIsDone(true);
-								else
-									CSceneGraph::GetInstance()->DeleteNode(*it2);
-								cout << "HURRAH!" << endl;
- 							}
-						}
-					}
-				}
+								if (p->GetType() == LAUNCHER) 
+									p->SetIsDone(true);
+								if (p->GetType() != GRENADE)
+								{
+									if (CSceneGraph::GetInstance()->GetNode(*it2) == nullptr)
+										(*it2)->SetIsDone(true);
+									else
+										CSceneGraph::GetInstance()->DeleteNode(*it2);
+								}
+							}
+						}/**/
+					//}
+				}/**/
 			}
-		}
+		}/**/
 	}
-	// Check for Collision
-
-
-	//thisEntity->SetIsDone(true);
-	//thatEntity->SetIsDone(true);
-
-	//if (CSceneGraph::GetInstance()->DeleteNode((*colliderThis)) == true)
-	//{
-	//	cout << "*** This Entity removed ***" << endl;
-	//}
-	//// Remove from Scene Graph
-	//if (CSceneGraph::GetInstance()->DeleteNode((*colliderThat)) == true)
-	//{
-	//	cout << "*** That Entity removed ***" << endl;
-
-	//}
-
 	return false;
 }

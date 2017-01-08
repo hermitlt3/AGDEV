@@ -270,11 +270,22 @@ void SceneText::Init()
 	house->SetCollider(true);
 
 	new Sack(Vector3(-235, -10, -275), 15);
-	
+	new Sack(Vector3(47, -10, 275), 15);
+	new Sack(Vector3(35, -10, 275), 15);
+	new Sack(Vector3(25, -10, 305), 15);
+	new Sack(Vector3(23, -10, 332), 15);
+	new Sack(Vector3(55, -10, 255), 15);
+	new Sack(Vector3(75, -10, 245), 15);
+
 	new Barrel(Vector3(-232, -10, -285), 15);
 	new Barrel(Vector3(-220, -10, -288), 15);
 	new Barrel(Vector3(-225, -10, -300), 15);
-	
+	new Barrel(Vector3(65, -10, 312.5f), 15);
+	new Barrel(Vector3(50, -10, 315.f), 15);
+	new Barrel(Vector3(47, -10, 304), 15);
+	new Barrel(Vector3(59, -10, 298), 15);
+	new Barrel(Vector3(61, -10, 322), 15);
+
 	new Crate(Vector3(-239, -10, -305), 15);
 	theEnemy = new CZombie();
 	theEnemy->Init(Vector3(366, -3, -10));
