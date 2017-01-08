@@ -8,7 +8,8 @@
 #include "../SceneGraph/SceneGraph.h"
 
 CZombie::CZombie() :
-	m_pTerrain(NULL)
+	m_pTerrain(NULL),
+	legless(false)
 {
 }
 
@@ -70,4 +71,13 @@ void CZombie::Update(double dt)
 {
 	if (CSceneGraph::GetInstance()->GetNode(bodyParts[3]))
 		CSceneGraph::GetInstance()->GetNode(bodyParts[3])->ApplyTranslate(dt * -10, 0, 0);
+	if (!CSceneGraph::GetInstance()->GetNode(bodyParts[4]) &&
+		!CSceneGraph::GetInstance()->GetNode(bodyParts[5]))
+	{
+		if (legless == false)
+		{
+			CSceneGraph::GetInstance()->GetNode(bodyParts[3])->ApplyTranslate(0, -3, 0);
+			legless = true;
+		}
+	}
 }

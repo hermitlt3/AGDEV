@@ -24,5 +24,5 @@ private:
 	GroundEntity* m_pTerrain;
 	GenericEntity* bodyParts[6];
 	double m_dSpeed;
-
+	bool legless;
 };
