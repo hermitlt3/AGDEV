@@ -52,6 +52,9 @@
     <Filter Include="Gameobject\Crate">
       <UniqueIdentifier>{12554a73-6c11-4fff-9bb2-7a628c9d91ac}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Animation">
+      <UniqueIdentifier>{3d8a66ce-a339-469b-897e-1a0552f0c4a7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp">
@@ -153,6 +156,9 @@
     <ClCompile Include="Source\Enemy\Zombie.cpp">
       <Filter>Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="Source\SpriteAnimation.cpp">
+      <Filter>Animation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -250,6 +256,9 @@
     </ClInclude>
     <ClInclude Include="Source\Enemy\Zombie.h">
       <Filter>Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SpriteAnimation.h">
+      <Filter>Animation</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
