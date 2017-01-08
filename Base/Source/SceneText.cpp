@@ -252,7 +252,6 @@ void SceneText::Init()
 	groundEntity->SetScale(Vector3(125.0f, 125.0f, 125.0f));
 	groundEntity->SetGrids(Vector3(8.0f, 8.f, 8.0f));
 	playerInfo->SetTerrain(groundEntity);
-	//theEnemy->SetTerrain(groundEntity);
 
 	// Setup the 2D entities
 	float halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2.0f;
