@@ -9,6 +9,10 @@ SpriteAnimation::SpriteAnimation(const std::string &meshName, int row, int col)
 , m_currentTime(0)
 , m_currentFrame(0)
 , m_playCount(0)
+, pos(0, 0, 0)
+, rotationY(0)
+, scale(0, 0, 0)
+, playerPos(0, 0, 0)
 {
 	m_anim = NULL;
 }
@@ -21,6 +25,8 @@ SpriteAnimation::~SpriteAnimation()
 
 void SpriteAnimation::Update(double dt)
 {
+	rotationY = Math::RadianToDegree(atan2((playerPos - pos).x, (playerPos - pos).z));
+
 	if (m_anim->animActive == true) // If animation happens
 	{
 		// Get Animation current time, m_currentTime.
@@ -43,7 +49,7 @@ void SpriteAnimation::Update(double dt)
 			{
 				m_anim->animActive = false;
 				m_currentTime = 0.0;
-				m_currentFrame = m_anim->startFrame;
+				//m_currentFrame = m_anim->startFrame;
 			}
 			if (m_anim->repeatCount == 1)
 			{

@@ -234,7 +234,9 @@ void SceneText::Init()
 	
 	MeshBuilder::GetInstance()->GenerateSpriteAnimation("GrenadeExplode", 3, 5);
 	MeshBuilder::GetInstance()->GetMesh("GrenadeExplode")->textureID = LoadTGA("Image//BOOM.tga");
-	Create::SAnimation("GrenadeExplode", 0, 14, 1, 2.f, false);
+	
+	MeshBuilder::GetInstance()->GenerateOBJ("ZGun", "OBJ//Gameobject//M4a1_s.obj");
+	MeshBuilder::GetInstance()->GetMesh("ZGun")->textureID = LoadTGA("Image//M4A1.tga");
 
 	// Set up the Spatial Partition and pass it to the EntityManager to manage
 	CSpatialPartition::GetInstance()->Init(125, 125, 8, 8);
@@ -274,6 +276,10 @@ void SceneText::Init()
 	house->InitLOD("House_H", "House_M", "House_L");
 	house->SetAABB(Vector3(30, 55, 75), Vector3(-25, 0, -60));
 	house->SetCollider(true);
+
+	GenericEntity* gun = Create::Entity("ZGun", Vector3(playerInfo->GetPos().x - 5, playerInfo->GetPos().y - 3, playerInfo->GetPos().z - 5), Vector3(2, 2, 2));
+	theGun->SetEntity(gun);
+	theGun->ApplyRotate(30.f, 0, 1, 0);
 
 	new Sack(Vector3(-235, -10, -275), 15);
 	new Sack(Vector3(47, -10, 275), 15);
@@ -379,7 +385,7 @@ void SceneText::Update(double dt)
 
 	// Update the player position and other details based on keyboard and mouse inputs
 	playerInfo->Update(dt);
-
+	theGun->GetTranslate() = (playerInfo->GetPos().x - 5, playerInfo->GetPos().y - 3, playerInfo->GetPos().z - 5);
 	GraphicsManager::GetInstance()->UpdateLights(dt);
 
 	// Update the 2 text object values. NOTE: Can do this in their own class but i'm lazy to do it now :P

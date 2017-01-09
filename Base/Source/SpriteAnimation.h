@@ -1,5 +1,6 @@
 #include "Mesh.h"
 #include <vector>
+#include "Vector3.h"
 
 struct Animation
 {
@@ -33,4 +34,8 @@ public:
 	int m_currentFrame;
 	int m_playCount;
 	Animation *m_anim;
+	Vector3 pos;
+	float rotationY;
+	Vector3 scale;
+	Vector3 playerPos;
 };

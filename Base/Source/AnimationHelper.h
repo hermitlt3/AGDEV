@@ -1,8 +1,7 @@
 #pragma once
 #include "SingletonTemplate.h"
-#include <list>
-#include <queue>
 #include "Vector3.h"
+#include <list>
 
 class SpriteAnimation;
 class Animation;
@@ -14,9 +13,8 @@ public:
 	bool AddAnimation(SpriteAnimation* s);
 	void UpdateAnimation(double dt);
 	void RenderAnimation();
-	
-	void SetAnimationActive(std::string meshName);
 
+	AnimHelper();
 	~AnimHelper();
 
 private:
@@ -26,5 +24,6 @@ private:
 namespace Create
 {
 	SpriteAnimation* SAnimation(const std::string meshName, 
-		int startFrame, int endFrame, int repeat, float time, bool active);
+		int startFrame, int endFrame, int repeat, float time, bool active,
+		Vector3 pos, Vector3 scale, Vector3 playerPOs);
 }

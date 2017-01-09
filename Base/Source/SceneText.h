@@ -18,6 +18,8 @@ class SceneManager;
 class TextEntity;
 class Light;
 class Windmill;
+class CSceneNode;
+
 //using namespace irrklang;
 class SceneText : public Scene
 {	
@@ -43,7 +45,7 @@ private:
 	GenericEntity* theCube;
 	CZombie* theEnemy;
 	Windmill *mill;
-
+	CSceneNode* theGun;
 	//ISoundEngine* Sound_Engine;
 	//ISound* Sound;
 

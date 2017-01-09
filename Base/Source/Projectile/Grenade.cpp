@@ -49,6 +49,7 @@ void CGrenade::Update(double dt)
 	m_fLifetime -= (float)dt;
 	if (m_fLifetime < 0.0f)
 	{
+		Create::SAnimation("GrenadeExplode", 0, 14, 0, 1.f, true, position + Vector3(0, 15, 0), Vector3(30,30,30), GetSource()->GetPos());
 		SetStatus(false);
 		SetIsDone(true);	// This method informs EntityManager to remove this instance
 		if (position.x >(CSpatialPartition::GetInstance()->GetxSize() >> 1) ||

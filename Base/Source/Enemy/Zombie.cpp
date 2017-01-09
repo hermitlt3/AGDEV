@@ -76,7 +76,8 @@ void CZombie::Update(double dt)
 	{
 		if (legless == false)
 		{
-			CSceneGraph::GetInstance()->GetNode(bodyParts[3])->ApplyTranslate(0, -3, 0);
+			if (CSceneGraph::GetInstance()->GetNode(bodyParts[3]))
+				CSceneGraph::GetInstance()->GetNode(bodyParts[3])->ApplyTranslate(0, -3, 0);
 			legless = true;
 		}
 	}
