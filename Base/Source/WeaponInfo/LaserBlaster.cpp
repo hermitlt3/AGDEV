@@ -2,6 +2,7 @@
 #include "../Projectile/Laser.h"
 #include "MeshBuilder.h"
 #include "../EntityManager.h"
+#include "../BulletfireSprite.h"
 
 CLaserBlaster::CLaserBlaster()
 {
@@ -19,13 +20,13 @@ void CLaserBlaster::Init(void)
 	CWeaponInfo::Init();
 
 	// The number of ammunition in a magazine for this weapon
-	magRounds = 5;
+	magRounds = 30;
 	// The maximum number of ammunition for this magazine for this weapon
-	maxMagRounds = 5;
+	maxMagRounds = 30;
 	// The current total number of rounds currently carried by this player
-	totalRounds = 10;
+	totalRounds = 30;
 	// The max total number of rounds currently carried by this player
-	maxTotalRounds = 10;
+	maxTotalRounds = 30;
 
 	// The time between shots
 	timeBetweenShots = 0.1667;
@@ -48,9 +49,9 @@ void CLaserBlaster::Discharge(Vector3 position, Vector3 target, CPlayerInfo* _so
 			CLaser* aLaser = Create::Laser("laser",
 											position,
 											_direction,
-											20.0f,
+											10.0f,
 											2.0f,
-											100.0f,
+											400.0f,
 											_source);
 			aLaser->SetIsLaser(true);
 			aLaser->SetCollider(false);

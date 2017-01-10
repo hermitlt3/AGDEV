@@ -14,6 +14,7 @@
     <ClCompile Include="Source\AnimationHelper.cpp" />
     <ClCompile Include="Source\Application.cpp" />
     <ClCompile Include="Source\Barrel.cpp" />
+    <ClCompile Include="Source\BulletfireSprite.cpp" />
     <ClCompile Include="Source\Crate.cpp" />
     <ClCompile Include="Source\Enemy\Zombie.cpp" />
     <ClCompile Include="Source\EntityManager.cpp" />
@@ -51,6 +52,7 @@
     <ClInclude Include="Source\AnimationHelper.h" />
     <ClInclude Include="Source\Application.h" />
     <ClInclude Include="Source\Barrel.h" />
+    <ClInclude Include="Source\BulletfireSprite.h" />
     <ClInclude Include="Source\Crate.h" />
     <ClInclude Include="Source\Enemy\Zombie.h" />
     <ClInclude Include="Source\EntityManager.h" />

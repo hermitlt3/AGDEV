@@ -29,6 +29,7 @@
 #include "Barrel.h"
 #include "Sack.h"
 #include "Crate.h"
+#include "BulletfireSprite.h"
 
 #include <iostream>
 using namespace std;
@@ -234,7 +235,9 @@ void SceneText::Init()
 	
 	MeshBuilder::GetInstance()->GenerateSpriteAnimation("GrenadeExplode", 3, 5);
 	MeshBuilder::GetInstance()->GetMesh("GrenadeExplode")->textureID = LoadTGA("Image//BOOM.tga");
-	
+	MeshBuilder::GetInstance()->GenerateQuad("Bulletfire", Color(0, 0, 0), 1);
+	MeshBuilder::GetInstance()->GetMesh("Bulletfire")->textureID = LoadTGA("Image//Projectiles//gunfire.tga");
+
 	MeshBuilder::GetInstance()->GenerateOBJ("ZGun", "OBJ//Gameobject//M4a1_s.obj");
 	MeshBuilder::GetInstance()->GetMesh("ZGun")->textureID = LoadTGA("Image//M4A1.tga");
 
@@ -303,6 +306,8 @@ void SceneText::Init()
 	theEnemy->Init(Vector3(366, -3, -10));
 
 	mill = new Windmill();
+
+	fireSprite = Create::BulletSprite("Bulletfire", Vector3(0, 0, 0), Vector3(2, 2, 2));
 }
 
 void SceneText::Update(double dt)
@@ -310,6 +315,19 @@ void SceneText::Update(double dt)
 	AnimHelper::GetInstance()->UpdateAnimation(dt);
 	mill->Update(dt);
 	theEnemy->Update(dt);
+	// Incorrect method. But too time consuming to do the correct method for now.
+	if (MouseController::GetInstance()->IsButtonDown(MouseController::LMB))
+	{
+		if (playerInfo->GetFirstWeapon()->GetMagRound() > 0)
+			fireSprite->isPressed = true;
+		else
+			fireSprite->isPressed = false;
+	}
+	else
+	{
+		fireSprite->ownTimer = fireSprite->stopTimer;
+		fireSprite->isPressed = false;
+	}
 	// Update our entities
 	EntityManager::GetInstance()->Update(dt);
 
@@ -387,10 +405,14 @@ void SceneText::Update(double dt)
 	playerInfo->Update(dt);
 
 	Vector3 gunDirection = (playerInfo->GetTarget() - (playerInfo->GetPos())).Normalized();
-	std::cout << playerInfo->GetTarget() << "\t" << playerInfo->GetPos() << std::endl;
+
 	theGun->SetRotate(Math::RadianToDegree(atan2(gunDirection.x, gunDirection.z)), 0, 1, 0);
 	theGun->ApplyRotate(Math::RadianToDegree(-gunDirection.y), 1, 0, 0);
 	theGun->SetTranslate(playerInfo->GetPos() + gunDirection * 5.f + Vector3(0, -2, 0));
+	fireSprite->SetPosition(playerInfo->GetPos() + gunDirection * 9.f);
+	fireSprite->rotationY = 180.f + Math::RadianToDegree(atan2(gunDirection.x, gunDirection.z));
+
+
 	GraphicsManager::GetInstance()->UpdateLights(dt);
 
 	// Update the 2 text object values. NOTE: Can do this in their own class but i'm lazy to do it now :P
@@ -416,7 +438,9 @@ void SceneText::Render()
 	// Setup 3D pipeline then render 3D
 	GraphicsManager::GetInstance()->SetPerspectiveProjection(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
 	GraphicsManager::GetInstance()->AttachCamera(&camera);
+	glEnable(GL_SAMPLE_ALPHA_TO_COVERAGE);
 	EntityManager::GetInstance()->Render();
+	glDisable(GL_SAMPLE_ALPHA_TO_COVERAGE);
 
 	glEnable(GL_SAMPLE_ALPHA_TO_COVERAGE);
 	AnimHelper::GetInstance()->RenderAnimation();

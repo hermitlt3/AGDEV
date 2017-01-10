@@ -19,6 +19,7 @@ class TextEntity;
 class Light;
 class Windmill;
 class CSceneNode;
+class BulletfireSprite;
 
 //using namespace irrklang;
 class SceneText : public Scene
@@ -46,6 +47,7 @@ private:
 	CZombie* theEnemy;
 	Windmill *mill;
 	CSceneNode* theGun;
+	BulletfireSprite* fireSprite;
 	//ISoundEngine* Sound_Engine;
 	//ISound* Sound;
 
