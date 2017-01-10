@@ -376,7 +376,7 @@ bool CSpatialPartition::IsVisible(	Vector3 theCameraPosition,
 	Vector3 gridCentre(xDistance, 0, zDistance);
 	if (theCameraDirection.Dot(gridCentre) < 0)
 	{
-		//return false;
+		return false;
 	}
 	return true;
 }

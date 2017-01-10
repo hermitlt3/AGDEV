@@ -34,9 +34,6 @@
     <Filter Include="LevelOfDetails">
       <UniqueIdentifier>{3f38a962-a883-4f37-9a91-6979b4fc1f88}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Enemy">
-      <UniqueIdentifier>{f5fb02ce-b59a-403f-b90f-1e6eba658755}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Gameobject">
       <UniqueIdentifier>{ace7056e-59d3-4d7b-a0bd-e8d29051e38e}</UniqueIdentifier>
     </Filter>
@@ -51,6 +48,21 @@
     </Filter>
     <Filter Include="Gameobject\Crate">
       <UniqueIdentifier>{12554a73-6c11-4fff-9bb2-7a628c9d91ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Animation">
+      <UniqueIdentifier>{3d8a66ce-a339-469b-897e-1a0552f0c4a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Models">
+      <UniqueIdentifier>{f5fb02ce-b59a-403f-b90f-1e6eba658755}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Gameobject\BulletfireSprite">
+      <UniqueIdentifier>{d198dc2d-3b33-43d6-8ae3-e80be319c321}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Gameobject\BigText">
+      <UniqueIdentifier>{57bd8405-61ad-48f4-a0d6-9144a6c67e90}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MobGenerator">
+      <UniqueIdentifier>{f5bd307b-fcbb-490c-b8e7-b8bbda807c1d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -150,8 +162,26 @@
     <ClCompile Include="Source\Crate.cpp">
       <Filter>Gameobject\Crate</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Enemy\Zombie.cpp">
-      <Filter>Enemy</Filter>
+    <ClCompile Include="Source\SpriteAnimation.cpp">
+      <Filter>Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\AnimationHelper.cpp">
+      <Filter>Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\BulletfireSprite.cpp">
+      <Filter>Gameobject\BulletfireSprite</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\BigTextSprite.cpp">
+      <Filter>Gameobject\BigText</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Steve.cpp">
+      <Filter>Models</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Zombi.cpp">
+      <Filter>Models</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ZGenerator.cpp">
+      <Filter>MobGenerator</Filter>
     </ClCompile>
     <ClCompile Include="Source\Enemy\Enemy.cpp">
       <Filter>Enemy</Filter>
@@ -251,8 +281,26 @@
     <ClInclude Include="Source\Crate.h">
       <Filter>Gameobject\Crate</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Enemy\Zombie.h">
-      <Filter>Enemy</Filter>
+    <ClInclude Include="Source\SpriteAnimation.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\AnimationHelper.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\BulletfireSprite.h">
+      <Filter>Gameobject\BulletfireSprite</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\BigTextSprite.h">
+      <Filter>Gameobject\BigText</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Steve.h">
+      <Filter>Models</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Zombi.h">
+      <Filter>Models</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ZGenerator.h">
+      <Filter>MobGenerator</Filter>
     </ClInclude>
     <ClInclude Include="Source\Enemy\Enemy.h">
       <Filter>Enemy</Filter>

@@ -9,7 +9,7 @@
 
 // Forward Declaration
 class Mesh;
-
+class SpriteAnimation;
 /******************************************************************************/
 /*!
 		Class MeshBuilder:
@@ -33,6 +33,7 @@ public:
 	Mesh* GenerateRay(const std::string &meshName, const float length = 1.0f);
 	Mesh* GenerateTerrain(const std::string &meshName, const std::string &file_path, std::vector<unsigned char> &heightmap);
 	Mesh* GenerateBar(const std::string &meshname, Color color, float length = 1.f);
+	SpriteAnimation* GenerateSpriteAnimation(const std::string &meshName, unsigned numRow, unsigned numCol);
 
 	Mesh* GetMesh(const std::string& _meshName);
 	void AddMesh(const std::string& _meshName, Mesh* _newMesh);

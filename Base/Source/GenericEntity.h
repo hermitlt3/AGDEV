@@ -16,7 +16,7 @@ public:
 
 	virtual void Update(double _dt);
 	virtual void Render();
-	virtual Mesh* GetMesh() { return modelMesh; }
+	virtual Mesh* GetMesh();
 	// Set the maxAABB and minAABB
 	void SetAABB(Vector3 maxAABB, Vector3 minAABB);
 

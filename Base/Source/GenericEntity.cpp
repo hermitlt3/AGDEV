@@ -4,6 +4,7 @@
 #include "GraphicsManager.h"
 #include "RenderHelper.h"
 #include "Physics.h"
+#include "SceneGraph\SceneGraph.h"
 
 GenericEntity::GenericEntity(Mesh* _modelMesh)
 	: modelMesh(_modelMesh)
@@ -18,7 +19,6 @@ GenericEntity::~GenericEntity()
 void GenericEntity::Update(double _dt)
 {
 	// Does nothing here, can inherit & override or create your own version of this class :D
-	update(position, _dt); // Physics
 }
 
 void GenericEntity::Render()
@@ -42,6 +42,16 @@ void GenericEntity::SetAABB(Vector3 maxAABB, Vector3 minAABB)
 {
 	this->maxAABB = maxAABB;
 	this->minAABB = minAABB;
+}
+
+Mesh* GenericEntity::GetMesh()
+{
+	if (GetLODStatus() == true)
+	{
+		return GetLODMesh();
+	}
+	else
+		return modelMesh;
 }
 
 GenericEntity* Create::Entity(	const std::string& _meshName, 

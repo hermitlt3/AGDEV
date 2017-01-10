@@ -9,6 +9,7 @@ public:
 	~Windmill();
 
 	void Update(double dt);
+	//void Render();
 
 private:
 	GenericEntity* parts[3];

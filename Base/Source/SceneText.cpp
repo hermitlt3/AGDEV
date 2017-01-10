@@ -23,10 +23,17 @@
 #include "SceneGraph\SceneGraph.h"
 #include "SpatialPartition\SpatialPartition.h"
 
+#include "SpriteAnimation.h"
+#include "AnimationHelper.h"
 #include "Windmill.h"
 #include "Barrel.h"
 #include "Sack.h"
 #include "Crate.h"
+#include "BulletfireSprite.h"
+#include "BigTextSprite.h"
+#include "Steve.h"
+#include "Zombi.h"
+#include "ZGenerator.h"
 
 #include <iostream>
 using namespace std;
@@ -225,11 +232,37 @@ void SceneText::Init()
 	MeshBuilder::GetInstance()->GenerateOBJ("ZLeg", "OBJ//Steve//Leg.obj");
 	MeshBuilder::GetInstance()->GenerateOBJ("ZTorso", "OBJ//Steve//Torso.obj");
 	MeshBuilder::GetInstance()->GenerateOBJ("ZHead", "OBJ//Steve//Head.obj");
-	MeshBuilder::GetInstance()->GetMesh("ZHand")->textureID = LoadTGA("Image//Zombie.tga");
-	MeshBuilder::GetInstance()->GetMesh("ZLeg")->textureID = LoadTGA("Image//Zombie.tga");
-	MeshBuilder::GetInstance()->GetMesh("ZTorso")->textureID = LoadTGA("Image//Zombie.tga"); 
-	MeshBuilder::GetInstance()->GetMesh("ZHead")->textureID = LoadTGA("Image//Zombie.tga");
+	MeshBuilder::GetInstance()->GetMesh("ZHand")->textureID = LoadTGA("Image//zombie.tga");
+	MeshBuilder::GetInstance()->GetMesh("ZLeg")->textureID = LoadTGA("Image//zombie.tga");
+	MeshBuilder::GetInstance()->GetMesh("ZTorso")->textureID = LoadTGA("Image//zombie.tga"); 
+	MeshBuilder::GetInstance()->GetMesh("ZHead")->textureID = LoadTGA("Image//zombie.tga");
 	
+	MeshBuilder::GetInstance()->GenerateOBJ("SHand", "OBJ//Steve//Hand.obj");
+	MeshBuilder::GetInstance()->GenerateOBJ("SLeg", "OBJ//Steve//Leg.obj");
+	MeshBuilder::GetInstance()->GenerateOBJ("STorso", "OBJ//Steve//Torso.obj");
+	MeshBuilder::GetInstance()->GenerateOBJ("SHead", "OBJ//Steve//Head.obj");
+	MeshBuilder::GetInstance()->GetMesh("SHand")->textureID = LoadTGA("Image//steve.tga");
+	MeshBuilder::GetInstance()->GetMesh("SLeg")->textureID = LoadTGA("Image//steve.tga");
+	MeshBuilder::GetInstance()->GetMesh("STorso")->textureID = LoadTGA("Image//steve.tga");
+	MeshBuilder::GetInstance()->GetMesh("SHead")->textureID = LoadTGA("Image//steve.tga");
+
+	MeshBuilder::GetInstance()->GenerateSpriteAnimation("GrenadeExplode", 3, 5);
+	MeshBuilder::GetInstance()->GetMesh("GrenadeExplode")->textureID = LoadTGA("Image//BOOM.tga");
+	MeshBuilder::GetInstance()->GenerateQuad("Bulletfire", Color(0, 0, 0), 1);
+	MeshBuilder::GetInstance()->GetMesh("Bulletfire")->textureID = LoadTGA("Image//Projectiles//gunfire.tga");
+
+	MeshBuilder::GetInstance()->GenerateOBJ("ZGun", "OBJ//Gameobject//M4a1_s.obj");
+	MeshBuilder::GetInstance()->GetMesh("ZGun")->textureID = LoadTGA("Image//M4A1.tga");
+
+	MeshBuilder::GetInstance()->GenerateQuad("KillZombie", Color(0, 0, 0), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("KillZombie")->textureID = LoadTGA("Image//Text//killnpc.tga");
+	MeshBuilder::GetInstance()->GenerateQuad("KillNPC", Color(0, 0, 0), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("KillNPC")->textureID = LoadTGA("Image//Text//killzombie.tga");
+	MeshBuilder::GetInstance()->GenerateQuad("TextOR", Color(0, 0, 0), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("TextOR")->textureID = LoadTGA("Image//Text//or.tga");
+	MeshBuilder::GetInstance()->GenerateQuad("TextTOSTART", Color(0, 0, 0), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("TextTOSTART")->textureID = LoadTGA("Image//Text//tostart.tga");
+
 	// Set up the Spatial Partition and pass it to the EntityManager to manage
 	CSpatialPartition::GetInstance()->Init(125, 125, 8, 8);
 	CSpatialPartition::GetInstance()->SetMesh("GRIDMESH");
@@ -252,7 +285,6 @@ void SceneText::Init()
 	groundEntity->SetScale(Vector3(125.0f, 125.0f, 125.0f));
 	groundEntity->SetGrids(Vector3(8.0f, 8.f, 8.0f));
 	playerInfo->SetTerrain(groundEntity);
-	//theEnemy->SetTerrain(groundEntity);
 
 	// Setup the 2D entities
 	float halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2.0f;
@@ -270,23 +302,75 @@ void SceneText::Init()
 	house->SetAABB(Vector3(30, 55, 75), Vector3(-25, 0, -60));
 	house->SetCollider(true);
 
+	GenericEntity* gun = Create::Entity("ZGun", Vector3(playerInfo->GetPos().x - 5, playerInfo->GetPos().y - 3, playerInfo->GetPos().z - 5), Vector3(2, 2, 2));
+	theGun = CSceneGraph::GetInstance()->AddNode(gun);
+	theGun->ApplyRotate(-80.f, 0, 1, 0);
+
 	new Sack(Vector3(-235, -10, -275), 15);
-	
+	new Sack(Vector3(47, -10, 275), 15);
+	new Sack(Vector3(35, -10, 275), 15);
+	new Sack(Vector3(25, -10, 305), 15);
+	new Sack(Vector3(23, -10, 332), 15);
+	new Sack(Vector3(55, -10, 255), 15);
+	new Sack(Vector3(75, -10, 245), 15);
+
 	new Barrel(Vector3(-232, -10, -285), 15);
 	new Barrel(Vector3(-220, -10, -288), 15);
 	new Barrel(Vector3(-225, -10, -300), 15);
-	
+	new Barrel(Vector3(65, -10, 312.5f), 15);
+	new Barrel(Vector3(50, -10, 315.f), 15);
+	new Barrel(Vector3(47, -10, 304), 15);
+	new Barrel(Vector3(59, -10, 298), 15);
+	new Barrel(Vector3(61, -10, 322), 15);
+
 	new Crate(Vector3(-239, -10, -305), 15);
-	theEnemy = new CZombie();
-	theEnemy->Init(Vector3(366, -3, -10));
+	theZombie = new CZombie();
+	theZombie->Init(Vector3(-250, -3, -250));
+	theZombie->SetWayPoints(Vector3(-250, -3, -250), Vector3(-250, -3, 250), Vector3(250, -3, 250), Vector3(250, -3, -250));
+	theNPC = new CSteve();
+	theNPC->Init(Vector3(250, -3, 250));
+	theNPC->SetWayPoints(Vector3(250, -3, 250), Vector3(250, -3, -250), Vector3(-250, -3, -250), Vector3(-250, -3, 250));
 
 	mill = new Windmill();
+	fireSprite = Create::BulletSprite("Bulletfire", Vector3(0, 0, 0), Vector3(2, 2, 2));
+
+	Create::BigText("KillZombie", Vector3(-475, 300, -150), 90, Vector3(200, 75, 200));
+	Create::BigText("KillNPC", Vector3(-475, 300, 150), 90, Vector3(200, 75, 200));
+	Create::BigText("TextOR", Vector3(-475, 280, 0), 90, Vector3(50, 50, 50));
+	Create::BigText("TextTOSTART", Vector3(-475, 210, 0), 90, Vector3(200, 75, 200));
+
+	zombieGtr = new ZGenerator();
+	zombieGtr->SetStart(Vector3(-450, 0, -200));
+	zombieGtr->SetEnd(Vector3(-300, 0, 200));
+
+	startSGenerate = false;
+	startZGenerate = false;
 }
 
 void SceneText::Update(double dt)
 {
+	AnimHelper::GetInstance()->UpdateAnimation(dt);
 	mill->Update(dt);
-	theEnemy->Update(dt);
+	theZombie->Update(dt);
+	theNPC->Update(dt);
+	zombieGtr->GenerateZombies(playerInfo->GetPos());
+	
+	if (theZombie->GetIsDead() && !startSGenerate) {
+		zombieGtr->SetGenerate(true);
+		startSGenerate = true;
+	}
+	// Incorrect method. But too time consuming to do the correct method for now.
+	if (MouseController::GetInstance()->IsButtonDown(MouseController::LMB)) {
+		if (playerInfo->GetFirstWeapon()->GetMagRound() > 0)
+			fireSprite->isPressed = true;
+		else
+			fireSprite->isPressed = false;
+	}
+	else {
+		fireSprite->ownTimer = fireSprite->stopTimer;
+		fireSprite->isPressed = false;
+	}
+
 	// Update our entities
 	EntityManager::GetInstance()->Update(dt);
 
@@ -363,6 +447,15 @@ void SceneText::Update(double dt)
 	// Update the player position and other details based on keyboard and mouse inputs
 	playerInfo->Update(dt);
 
+	Vector3 gunDirection = (playerInfo->GetTarget() - (playerInfo->GetPos())).Normalized();
+
+	theGun->SetRotate(Math::RadianToDegree(atan2(gunDirection.x, gunDirection.z)), 0, 1, 0);
+	theGun->ApplyRotate(Math::RadianToDegree(-gunDirection.y), 1, 0, 0);
+	theGun->SetTranslate(playerInfo->GetPos() + gunDirection * 5.f + Vector3(0, -2, 0));
+	fireSprite->SetPosition(playerInfo->GetPos() + gunDirection * 9.f);
+	fireSprite->rotationY = 180.f + Math::RadianToDegree(atan2(gunDirection.x, gunDirection.z));
+
+
 	GraphicsManager::GetInstance()->UpdateLights(dt);
 
 	// Update the 2 text object values. NOTE: Can do this in their own class but i'm lazy to do it now :P
@@ -388,8 +481,14 @@ void SceneText::Render()
 	// Setup 3D pipeline then render 3D
 	GraphicsManager::GetInstance()->SetPerspectiveProjection(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
 	GraphicsManager::GetInstance()->AttachCamera(&camera);
+	glEnable(GL_SAMPLE_ALPHA_TO_COVERAGE);
 	EntityManager::GetInstance()->Render();
-	
+	glDisable(GL_SAMPLE_ALPHA_TO_COVERAGE);
+
+	glEnable(GL_SAMPLE_ALPHA_TO_COVERAGE);
+	AnimHelper::GetInstance()->RenderAnimation();
+	glDisable(GL_SAMPLE_ALPHA_TO_COVERAGE);
+
 	// Setup 2D pipeline then render 2D
 	int halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2;
 	int halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2;

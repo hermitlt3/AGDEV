@@ -5,19 +5,23 @@
 #include "Scene.h"
 #include "Mtx44.h"
 #include "PlayerInfo/PlayerInfo.h"
-#include "GroundEntity.h"
 #include "FPSCamera.h"
 #include "Mesh.h"
 #include "MatrixStack.h"
-#include "GenericEntity.h"
-#include "SceneGraph/UpdateTransformation.h"
-#include "Enemy\Zombie.h"
 
 class ShaderProgram;
 class SceneManager;
 class TextEntity;
 class Light;
 class Windmill;
+class CSceneNode;
+class BulletfireSprite;
+class GenericEntity;
+class GroundEntity;
+class CZombie;
+class CSteve;
+class ZGenerator;
+
 //using namespace irrklang;
 class SceneText : public Scene
 {	
@@ -41,11 +45,16 @@ private:
 	Light* lights[2];
 
 	GenericEntity* theCube;
-	CZombie* theEnemy;
+	CSteve* theNPC;
+	CZombie* theZombie;
 	Windmill *mill;
-
+	CSceneNode* theGun;
+	BulletfireSprite* fireSprite;
+	ZGenerator* zombieGtr;
 	//ISoundEngine* Sound_Engine;
 	//ISound* Sound;
+	bool startZGenerate;
+	bool startSGenerate;
 
 	static SceneText* sInstance; // The pointer to the object that gets registered
 };

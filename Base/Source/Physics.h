@@ -7,30 +7,34 @@ class Physics
 	friend class GroundEntity;
 	friend class CProjectile;
 
-	const float IN_GAME_GRAVITY = -15.f;
 
 public:
 	~Physics();
 
-	void update(Vector3& position, double _dt);
-	bool& boolGravity() { return isAffectedbyG;  }
-	bool& boolAcceleration() { return isAffectedbyA;  }
-	bool& boolPhysics() { return physicsToggle; }
-	Vector3& getVelocity() { return velocity; }
-	Vector3& getAcceleration() { return acceleration; }
-	Vector3& getForce() { return force; }
+	inline Vector3& GetVelocity() { return velocity; }
+	inline Vector3& GetAcceleration() { return acceleration; }
+	inline Vector3& GetForce() { return force; }
+	inline Vector3& GetDirection() { return direction; }
+	inline float& GetMass() { return mass; }
+
+	virtual void Update(double dt) = 0;
+
+	inline void SetVelocity(const Vector3& vel) { velocity = vel; }
+	inline void SetForce(const Vector3& _force) { force = _force; }
+	inline void SetAcceleration(const Vector3& acc) { acceleration = acc; };
+	inline void SetDirection(const Vector3& dir) { direction = dir; };
+	inline void SetMass(const float& mass) { this->mass = mass; }
 
 protected:
-	bool isAffectedbyG;
-	bool isAffectedbyA;
-	bool physicsToggle;
 
 	Vector3 force;
 	Vector3 acceleration;
 	Vector3 velocity;
+	Vector3 direction;
 
 	float mass;
-	
+	const float IN_GAME_GRAVITY = -980.f;
+
 private:
 	Physics();
 };

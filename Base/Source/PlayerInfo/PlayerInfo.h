@@ -71,6 +71,7 @@ public:
 	Vector3 GetTarget(void) const;
 	// Get Up
 	Vector3 GetUp(void) const;
+
 	// Get Jump Speed of the player
 	double GetJumpSpeed(void) const;
 	// Get Jump Acceleration of the player
@@ -95,6 +96,8 @@ public:
 	// Handling Camera
 	void AttachCamera(FPSCamera* _cameraPtr);
 	void DetachCamera(void);
+
+	CWeaponInfo* GetFirstWeapon() { return primaryWeapon; }
 
 private:
 	Vector3 defaultPosition, defaultTarget, defaultUp;

@@ -386,7 +386,8 @@ void CSceneNode::Render(void)
 			*/
 
 			// Render the entity
-			RenderHelper::RenderMesh(theEntity->GetMesh());
+			if (theEntity->GetMesh())
+				RenderHelper::RenderMesh(theEntity->GetMesh());
 		}
 
 		// Render the children

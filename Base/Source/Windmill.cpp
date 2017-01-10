@@ -8,13 +8,13 @@
 
 Windmill::Windmill()
 {
-	parts[0] = Create::Entity("Sack_H", Vector3(-315, -10, -315), Vector3(25, 25, 25), false);
+	parts[0] = Create::Entity("Windmill_botH", Vector3(-315, -10, -315), Vector3(25, 25, 25), false);
 	parts[1] = Create::Entity("Windmill_topH", Vector3(0, 5, 0), Vector3(1, 1, 1), false);
 	parts[2] = Create::Entity("Windmill_sailH", Vector3(2.3f, 2.f, 0.5f), Vector3(0.8f, 0.8f, 0.8f), false);
-	bool test = false;
-	test = parts[0]->InitLOD("Windmill_botH", "Windmill_botM", "Windmill_botL");
-	test = parts[1]->InitLOD("Windmill_topH", "Windmill_topM", "Windmill_topL");
-	test = parts[2]->InitLOD("Windmill_sailH", "Windmill_sailM", "Windmill_sailL");
+
+	parts[0]->InitLOD("Windmill_botH", "Windmill_botM", "Windmill_botL");
+	parts[1]->InitLOD("Windmill_topH", "Windmill_topM", "Windmill_topL");
+	parts[2]->InitLOD("Windmill_sailH", "Windmill_sailM", "Windmill_sailL");
 
 	parts[0]->SetCollider(true);
 	parts[1]->SetCollider(true);
@@ -32,7 +32,7 @@ Windmill::Windmill()
 	CSpatialPartition::GetInstance()->Add(parts[1]);
 	CSpatialPartition::GetInstance()->Add(parts[2]);
 
-	cout << "For Debug Purposes: Windmill LOD is loaded. "<< test << endl;
+	cout << "For Debug Purposes: Windmill LOD is loaded. " << endl;
 	cout << "Windmill position " << CSceneGraph::GetInstance()->GetNode(parts[2])->GetNodeLocalTransform().GetTranslate() << endl;
 }
 

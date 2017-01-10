@@ -7,6 +7,15 @@
 class Mesh;
 class CPlayerInfo;
 
+enum PROJECTILE_TYPE
+{
+	PISTOL = 0,
+	GRENADE,
+	LAUNCHER,
+
+	TOTAL_PROJECTILES
+};
+
 class CProjectile : public EntityBase, public CCollider, public Physics
 {
 public:
@@ -38,6 +47,10 @@ public:
 	void SetSource(CPlayerInfo* _source);
 	// Get the source of the projectile
 	CPlayerInfo* GetSource(void) const;
+
+	PROJECTILE_TYPE GetType() const { return type; }
+	void SetType(const PROJECTILE_TYPE type) { this->type = type; }
+
 	virtual Mesh* GetMesh() { return modelMesh; }
 
 	// Update the status of this projectile
@@ -57,6 +70,8 @@ protected:
 	Vector3 theDirection;
 	// The character which fired this projectile
 	CPlayerInfo* theSource;
+
+	PROJECTILE_TYPE type;
 };
 
 namespace Create

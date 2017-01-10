@@ -26,7 +26,7 @@ void EntityManager::Update(double _dt)
 		theSpatialPartition->Update();
 
 	// Check for Collision amongst entities with collider properties
-	CheckForCollision();
+	CheckForCollision(_dt);
 
 	// Clean up entities that are done
 	it = entityList.begin();
@@ -159,65 +159,22 @@ EntityManager::~EntityManager()
 // Check for overlap
 bool EntityManager::CheckOverlap(Vector3 thisMinAABB, Vector3 thisMaxAABB, Vector3 thatMinAABB, Vector3 thatMaxAABB)
 {	
-	// Check if this object is overlapping that object
-	/*
-	if (((thatMinAABB.x >= thisMinAABB.x) && (thatMinAABB.x <= thisMaxAABB.x) &&
-	(thatMinAABB.y >= thisMinAABB.y) && (thatMinAABB.y <= thisMaxAABB.y) &&
-	(thatMinAABB.z >= thisMinAABB.z) && (thatMinAABB.z <= thisMaxAABB.z))
-	||
-	((thatMaxAABB.x >= thisMinAABB.x) && (thatMaxAABB.x <= thisMaxAABB.x) &&
-	(thatMaxAABB.y >= thisMinAABB.y) && (thatMaxAABB.y <= thisMaxAABB.y) &&
-	(thatMaxAABB.z >= thisMinAABB.z) && (thatMaxAABB.z <= thisMaxAABB.z)))
-	*/
 	if (((thatMinAABB >= thisMinAABB) && (thatMinAABB <= thisMaxAABB))
 		||
 		((thatMaxAABB >= thisMinAABB) && (thatMaxAABB <= thisMaxAABB)))
 	{
 		return true;
 	}
-
-	// Check if that object is overlapping this object
-	/*
-	if (((thisMinAABB.x >= thatMinAABB.x) && (thisMinAABB.x <= thatMaxAABB.x) &&
-	(thisMinAABB.y >= thatMinAABB.y) && (thisMinAABB.y <= thatMaxAABB.y) &&
-	(thisMinAABB.z >= thatMinAABB.z) && (thisMinAABB.z <= thatMaxAABB.z))
-	||
-	((thisMaxAABB.x >= thatMinAABB.x) && (thisMaxAABB.x <= thatMaxAABB.x) &&
-	(thisMaxAABB.y >= thatMinAABB.y) && (thisMaxAABB.y <= thatMaxAABB.y) &&
-	(thisMaxAABB.z >= thatMinAABB.z) && (thisMaxAABB.z <= thatMaxAABB.z)))
-	*/
 	if (((thisMinAABB >= thatMinAABB) && (thisMinAABB <= thatMaxAABB))
 		||
 		((thisMaxAABB >= thatMinAABB) && (thisMaxAABB <= thatMaxAABB)))
 	{
 		return true;
 	}
-
-	// Check if this object is within that object
-	/*
-	if (((thisMinAABB.x >= thatMinAABB.x) && (thisMaxAABB.x <= thatMaxAABB.x) &&
-	(thisMinAABB.y >= thatMinAABB.y) && (thisMaxAABB.y <= thatMaxAABB.y) &&
-	(thisMinAABB.z >= thatMinAABB.z) && (thisMaxAABB.z <= thatMaxAABB.z))
-	&&
-	((thisMaxAABB.x >= thatMinAABB.x) && (thisMaxAABB.x <= thatMaxAABB.x) &&
-	(thisMaxAABB.y >= thatMinAABB.y) && (thisMaxAABB.y <= thatMaxAABB.y) &&
-	(thisMaxAABB.z >= thatMinAABB.z) && (thisMaxAABB.z <= thatMaxAABB.z)))
-	*/
 	if (((thisMinAABB >= thatMinAABB) && (thisMaxAABB <= thatMaxAABB))
 		&&
 		((thisMaxAABB >= thatMinAABB) && (thisMaxAABB <= thatMaxAABB)))
 		return true;
-
-	// Check if that object is within this object
-	/*
-	if (((thatMinAABB.x >= thisMinAABB.x) && (thatMinAABB.x <= thisMaxAABB.x) &&
-	(thatMinAABB.y >= thisMinAABB.y) && (thatMinAABB.y <= thisMaxAABB.y) &&
-	(thatMinAABB.z >= thisMinAABB.z) && (thatMinAABB.z <= thisMaxAABB.z))
-	&&
-	((thatMaxAABB.x >= thisMinAABB.x) && (thatMaxAABB.x <= thisMaxAABB.x) &&
-	(thatMaxAABB.y >= thisMinAABB.y) && (thatMaxAABB.y <= thisMaxAABB.y) &&
-	(thatMaxAABB.z >= thisMinAABB.z) && (thatMaxAABB.z <= thisMaxAABB.z)))
-	*/
 	if (((thatMinAABB >= thisMinAABB) && (thatMinAABB <= thisMaxAABB))
 		&&
 		((thatMaxAABB >= thisMinAABB) && (thatMaxAABB <= thisMaxAABB)))
@@ -232,22 +189,68 @@ bool EntityManager::CheckSphereCollision(EntityBase *ThisEntity, EntityBase *Tha
 	// Get the colliders for the 2 entities
 	CCollider *thisCollider = dynamic_cast<CCollider*>(ThisEntity);
 	CCollider *thatCollider = dynamic_cast<CCollider*>(ThatEntity);
-
+	Vector3 thisMinAABB, thisMaxAABB, thatMinAABB, thatMaxAABB;
 	// Get the minAABB and maxAABB for each entity
-	Vector3 thisMinAABB = ThisEntity->GetPosition() + thisCollider->GetMinAABB();
-	Vector3 thisMaxAABB = ThisEntity->GetPosition() + thisCollider->GetMaxAABB();
-	Vector3 thatMinAABB = ThatEntity->GetPosition() + thatCollider->GetMinAABB();
-	Vector3 thatMaxAABB = ThatEntity->GetPosition() + thatCollider->GetMaxAABB();
+	if (CSceneGraph::GetInstance()->GetNode(ThisEntity) == nullptr)
+	{
+		thisMinAABB = ThisEntity->GetPosition() + thisCollider->GetMinAABB();
+		thisMaxAABB = ThisEntity->GetPosition() + thisCollider->GetMaxAABB();
+	}
+	else
+	{
+		thisMinAABB = CSceneGraph::GetInstance()->GetNode(ThisEntity)->GetNodeLocalTransform().GetTranslate() + thisCollider->GetMinAABB();
+		thisMaxAABB = CSceneGraph::GetInstance()->GetNode(ThisEntity)->GetNodeLocalTransform().GetTranslate() + thisCollider->GetMaxAABB();
+	}
+	if (CSceneGraph::GetInstance()->GetNode(ThatEntity) == nullptr)
+	{
+		thatMinAABB = ThatEntity->GetPosition() + thatCollider->GetMinAABB();
+		thatMaxAABB = ThatEntity->GetPosition() + thatCollider->GetMaxAABB();
+	}
+	else
+	{
+		thatMinAABB = CSceneGraph::GetInstance()->GetNode(ThatEntity)->GetNodeLocalTransform().GetTranslate() + thatCollider->GetMinAABB();
+		thatMaxAABB = CSceneGraph::GetInstance()->GetNode(ThatEntity)->GetNodeLocalTransform().GetTranslate() + thatCollider->GetMaxAABB();
 
+	}
 	// if Radius of bounding sphere of ThisEntity plus Radius of bounding sphere of ThatEntity is 
 	// greater than the distance squared between the 2 reference points of the 2 entities,
 	// then it could mean that they are colliding with each other.
-	if (DistanceSquaredBetween(thisMinAABB, thisMaxAABB) + DistanceSquaredBetween(thatMinAABB, thatMaxAABB) >
-		DistanceSquaredBetween(ThisEntity->GetPosition(), ThatEntity->GetPosition()) * 2.0)
+	if (CSceneGraph::GetInstance()->GetNode(ThisEntity) == nullptr &&
+		CSceneGraph::GetInstance()->GetNode(ThatEntity) == nullptr)
 	{
-		return true;
+		if (DistanceSquaredBetween(thisMinAABB, thisMaxAABB) + DistanceSquaredBetween(thatMinAABB, thatMaxAABB) >
+			DistanceSquaredBetween(ThisEntity->GetPosition(), ThatEntity->GetPosition()) * 2.0)
+		{
+			return true;
+		}
 	}
-
+	else if (CSceneGraph::GetInstance()->GetNode(ThisEntity) != nullptr &&
+		CSceneGraph::GetInstance()->GetNode(ThatEntity) == nullptr)
+	{
+		if (DistanceSquaredBetween(thisMinAABB, thisMaxAABB) + DistanceSquaredBetween(thatMinAABB, thatMaxAABB) >
+			DistanceSquaredBetween(CSceneGraph::GetInstance()->GetNode(ThisEntity)->GetNodeLocalTransform().GetTranslate(), ThatEntity->GetPosition()) * 2.0)
+		{
+			return true;
+		}
+	}
+	else if (CSceneGraph::GetInstance()->GetNode(ThisEntity) == nullptr &&
+		CSceneGraph::GetInstance()->GetNode(ThatEntity) != nullptr)
+	{
+		if (DistanceSquaredBetween(thisMinAABB, thisMaxAABB) + DistanceSquaredBetween(thatMinAABB, thatMaxAABB) >
+			DistanceSquaredBetween(ThisEntity->GetPosition(), CSceneGraph::GetInstance()->GetNode(ThatEntity)->GetNodeLocalTransform().GetTranslate()) * 2.0)
+		{
+			return true;
+		}
+	}
+	else if (CSceneGraph::GetInstance()->GetNode(ThisEntity) != nullptr &&
+		CSceneGraph::GetInstance()->GetNode(ThatEntity) != nullptr)
+	{
+		if (DistanceSquaredBetween(thisMinAABB, thisMaxAABB) + DistanceSquaredBetween(thatMinAABB, thatMaxAABB) >
+			DistanceSquaredBetween(CSceneGraph::GetInstance()->GetNode(ThisEntity)->GetNodeLocalTransform().GetTranslate(), CSceneGraph::GetInstance()->GetNode(ThatEntity)->GetNodeLocalTransform().GetTranslate()) * 2.0)
+		{
+			return true;
+		}
+	}
 	return false;
 }
 
@@ -258,12 +261,29 @@ bool EntityManager::CheckAABBCollision(EntityBase *ThisEntity, EntityBase *ThatE
 	CCollider *thisCollider = dynamic_cast<CCollider*>(ThisEntity);
 	CCollider *thatCollider = dynamic_cast<CCollider*>(ThatEntity);
 
+	Vector3 thisMinAABB, thisMaxAABB, thatMinAABB, thatMaxAABB;
 	// Get the minAABB and maxAABB for each entity
-	Vector3 thisMinAABB = ThisEntity->GetPosition() + thisCollider->GetMinAABB();
-	Vector3 thisMaxAABB = ThisEntity->GetPosition() + thisCollider->GetMaxAABB();
-	Vector3 thatMinAABB = ThatEntity->GetPosition() + thatCollider->GetMinAABB();
-	Vector3 thatMaxAABB = ThatEntity->GetPosition() + thatCollider->GetMaxAABB();
+	if (CSceneGraph::GetInstance()->GetNode(ThisEntity) == nullptr)
+	{
+		thisMinAABB = ThisEntity->GetPosition() + thisCollider->GetMinAABB();
+		thisMaxAABB = ThisEntity->GetPosition() + thisCollider->GetMaxAABB();
+	}
+	else
+	{
+		thisMinAABB = CSceneGraph::GetInstance()->GetNode(ThisEntity)->GetNodeLocalTransform().GetTranslate() + thisCollider->GetMinAABB();
+		thisMaxAABB = CSceneGraph::GetInstance()->GetNode(ThisEntity)->GetNodeLocalTransform().GetTranslate() + thisCollider->GetMaxAABB();
+	}
+	if (CSceneGraph::GetInstance()->GetNode(ThatEntity) == nullptr)
+	{
+		thatMinAABB = ThatEntity->GetPosition() + thatCollider->GetMinAABB();
+		thatMaxAABB = ThatEntity->GetPosition() + thatCollider->GetMaxAABB();
+	}
+	else
+	{
+		thatMinAABB = CSceneGraph::GetInstance()->GetNode(ThatEntity)->GetNodeLocalTransform().GetTranslate() + thatCollider->GetMinAABB();
+		thatMaxAABB = CSceneGraph::GetInstance()->GetNode(ThatEntity)->GetNodeLocalTransform().GetTranslate() + thatCollider->GetMaxAABB();
 
+	}
 	// Check for overlap
 	if (CheckOverlap(thisMinAABB, thisMaxAABB, thatMinAABB, thatMaxAABB))
 		return true;
@@ -272,8 +292,6 @@ bool EntityManager::CheckAABBCollision(EntityBase *ThisEntity, EntityBase *ThatE
 	// Do more collision checks with other points on each bounding box
 	Vector3 altThisMinAABB = Vector3(thisMinAABB.x, thisMinAABB.y, thisMaxAABB.z);
 	Vector3 altThisMaxAABB = Vector3(thisMaxAABB.x, thisMaxAABB.y, thisMinAABB.z);
-//	Vector3 altThatMinAABB = Vector3(thatMinAABB.x, thatMinAABB.y, thatMaxAABB.z);
-//	Vector3 altThatMaxAABB = Vector3(thatMaxAABB.x, thatMaxAABB.y, thatMinAABB.z);
 
 	// Check for overlap
 	if (CheckOverlap(altThisMinAABB, altThisMaxAABB, thatMinAABB, thatMaxAABB))
@@ -325,7 +343,7 @@ bool EntityManager::CheckLineSegmentPlane(	Vector3 line_start, Vector3 line_end,
 }
 
 // Check if any Collider is colliding with another Collider
-bool EntityManager::CheckForCollision(void)
+bool EntityManager::CheckForCollision(double dt)
 {
 	for (std::list<EntityBase*>::iterator it = entityList.begin(); it != entityList.end(); ++it)
 	{
@@ -334,15 +352,15 @@ bool EntityManager::CheckForCollision(void)
 			CLaser* Laser = dynamic_cast<CLaser*>(*it);
 			if (Laser->GetPosition().x > (CSpatialPartition::GetInstance()->GetxSize() >> 1) ||
 				Laser->GetPosition().x < -(CSpatialPartition::GetInstance()->GetxSize() >> 1) ||
-				Laser->GetPosition().z > (CSpatialPartition::GetInstance()->GetzSize() >> 1) ||
+				Laser->GetPosition().z >(CSpatialPartition::GetInstance()->GetzSize() >> 1) ||
 				Laser->GetPosition().z < -(CSpatialPartition::GetInstance()->GetzSize() >> 1))
 				continue;
 
 			vector<EntityBase*> temp = CSpatialPartition::GetInstance()->GetObjects(Laser->GetPosition(), 0);
-			
+
 			for (std::vector<EntityBase*>::iterator it2 = temp.begin(); it2 != temp.end(); ++it2)
 			{
-				if (*it == *it2) 
+				if (*it == *it2)
 					continue;
 				if ((*it2)->HasCollider())
 				{
@@ -362,7 +380,7 @@ bool EntityManager::CheckForCollision(void)
 					if (CheckLineSegmentPlane(Laser->GetPosition(),
 						Laser->GetPosition() - Laser->GetDirection() * Laser->GetLength(),
 						thatMinAABB, thatMaxAABB,
-						Vector3(0,0,0)) == true)
+						Vector3(0, 0, 0)) == true)
 					{
 						Laser->SetIsDone(true);
 						if (CSceneGraph::GetInstance()->GetNode(*it2) == nullptr)
@@ -373,97 +391,58 @@ bool EntityManager::CheckForCollision(void)
 				}
 			}
 		}
+		
+		else if ((*it)->HasCollider())
+		{
+			vector<EntityBase*> temp;
+			if(CSceneGraph::GetInstance()->GetNode(*it) == nullptr)
+			{
+				if ((*it)->GetPosition().x > (CSpatialPartition::GetInstance()->GetxSize() >> 1) ||
+					(*it)->GetPosition().x < -(CSpatialPartition::GetInstance()->GetxSize() >> 1) ||
+					(*it)->GetPosition().z >(CSpatialPartition::GetInstance()->GetzSize() >> 1) ||
+					(*it)->GetPosition().z < -(CSpatialPartition::GetInstance()->GetzSize() >> 1))
+					continue;
+				temp = CSpatialPartition::GetInstance()->GetObjects((*it)->GetPosition(), 0);
+			}
+			else
+			{
+				if (CSceneGraph::GetInstance()->GetNode(*it)->GetNodeLocalTransform().GetTranslate().x >(CSpatialPartition::GetInstance()->GetxSize() >> 1) ||
+					CSceneGraph::GetInstance()->GetNode(*it)->GetNodeLocalTransform().GetTranslate().x < -(CSpatialPartition::GetInstance()->GetxSize() >> 1) ||
+					CSceneGraph::GetInstance()->GetNode(*it)->GetNodeLocalTransform().GetTranslate().z >(CSpatialPartition::GetInstance()->GetzSize() >> 1) ||
+					CSceneGraph::GetInstance()->GetNode(*it)->GetNodeLocalTransform().GetTranslate().z < -(CSpatialPartition::GetInstance()->GetzSize() >> 1))
+					continue;
+				temp = CSpatialPartition::GetInstance()->GetObjects(CSceneGraph::GetInstance()->GetNode(*it)->GetNodeLocalTransform().GetTranslate(), 0);
+			}
+			
+			for (std::vector<EntityBase*>::iterator it2 = temp.begin(); it2 != temp.end(); ++it2)
+			{
+				if ((*it2) == (*it))
+					continue;
+				if ((*it2)->HasCollider())
+				{
+					//if (CheckSphereCollision(*it, *it2))
+					//{
+						if (CheckAABBCollision(*it, *it2))
+						{
+							CProjectile* p = dynamic_cast<CProjectile*>(*it);
+							CCollider* c = dynamic_cast<CCollider*>(*it2);
+							if (p)
+							{
+								if (p->GetType() == LAUNCHER) 
+									p->SetIsDone(true);
+								if (p->GetType() != GRENADE)
+								{
+									if (CSceneGraph::GetInstance()->GetNode(*it2) == nullptr)
+										(*it2)->SetIsDone(true);
+									else
+										CSceneGraph::GetInstance()->DeleteNode(*it2);
+								}
+							}
+						}/**/
+					//}
+				}/**/
+			}
+		}/**/
 	}
-	// Check for Collision
-	/*std::list<EntityBase*>::iterator colliderThis, colliderThisEnd;
-	std::list<EntityBase*>::iterator colliderThat, colliderThatEnd;
-
-	colliderThisEnd = entityList.end();
-	for (colliderThis = entityList.begin(); colliderThis != colliderThisEnd; ++colliderThis)
-	{
-		// Check if this entity is a CLaser type
-		if ((*colliderThis)->GetIsLaser())
-		{
-			// Dynamic cast it to a CLaser class
-			CLaser* thisEntity = dynamic_cast<CLaser*>(*colliderThis);
-
-			// Check for collision with another collider class
-			colliderThatEnd = entityList.end();
-			int counter = 0;
-			for (colliderThat = entityList.begin(); colliderThat != colliderThatEnd; ++colliderThat)
-			{
-				if (colliderThat == colliderThis)
-					continue;
-				if ((*colliderThat)->HasCollider())
-				{
-					Vector3 hitPosition = Vector3(0, 0, 0);
-
-					// Get the minAABB and maxAABB for (*colliderThat)
-					CCollider *thatCollider = dynamic_cast<CCollider*>(*colliderThat);
-					Vector3 thatMinAABB = (*colliderThat)->GetPosition() + thatCollider->GetMinAABB();
-					Vector3 thatMaxAABB = (*colliderThat)->GetPosition() + thatCollider->GetMaxAABB();
-					
-					if (CheckLineSegmentPlane(thisEntity->GetPosition(),
-												thisEntity->GetPosition() - thisEntity->GetDirection() * thisEntity->GetLength(),
-												thatMinAABB, thatMaxAABB,
-												hitPosition) == true)
-					{
-						(*colliderThis)->SetIsDone(true);
-						(*colliderThat)->SetIsDone(true);
-
-
-						// Remove from Scene Graph
-						if (CSceneGraph::GetInstance()->DeleteNode((*colliderThis)) == true)
-						{
-							cout << "*** This Entity removed ***" << endl;
-						}
-						// Remove from Scene Graph
-						if (CSceneGraph::GetInstance()->DeleteNode((*colliderThat)) == true)
-						{
-							cout << "*** That Entity removed ***" << endl;
-						}
-
-					}
-				}
-			}
-		}
-		else if ((*colliderThis)->HasCollider())
-		{
-			// This object was derived from a CCollider class, then it will have Collision Detection methods
-			//CCollider *thisCollider = dynamic_cast<CCollider*>(*colliderThis);
-			EntityBase *thisEntity = dynamic_cast<EntityBase*>(*colliderThis);
-
-			// Check for collision with another collider class
-			colliderThatEnd = entityList.end();
-			int counter = 0;
-			for (colliderThat = entityList.begin(); colliderThat != colliderThatEnd; ++colliderThat)
-			{
-				if (colliderThat == colliderThis)
-					continue;
-				if ((*colliderThat)->HasCollider())
-				{
-					EntityBase *thatEntity = dynamic_cast<EntityBase*>(*colliderThat);
-					if (CheckSphereCollision(thisEntity, thatEntity))
-					{
-						if (CheckAABBCollision(thisEntity, thatEntity))
-						{
-							thisEntity->SetIsDone(true);
-							thatEntity->SetIsDone(true);
-
-							if (CSceneGraph::GetInstance()->DeleteNode((*colliderThis)) == true)
-							{
-								cout << "*** This Entity removed ***" << endl;
-							}
-							// Remove from Scene Graph
-							if (CSceneGraph::GetInstance()->DeleteNode((*colliderThat)) == true)
-							{
-								cout << "*** That Entity removed ***" << endl;
-							}
-						}
-					}
-				}
-			}
-		}
-	}*/
 	return false;
 }
