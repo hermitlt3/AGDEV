@@ -377,7 +377,6 @@ bool EntityManager::CheckForCollision(double dt)
 						thatMinAABB = (*it2)->GetPosition() + it2Collider->GetMinAABB();
 						thatMaxAABB = (*it2)->GetPosition() + it2Collider->GetMaxAABB();
 					}
-					Vector3 a;
 					if (CheckLineSegmentPlane(Laser->GetPosition(),
 						Laser->GetPosition() - Laser->GetDirection() * Laser->GetLength(),
 						thatMinAABB, thatMaxAABB,

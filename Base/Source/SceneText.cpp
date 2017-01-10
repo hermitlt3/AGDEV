@@ -278,7 +278,6 @@ void SceneText::Init()
 	house->SetCollider(true);
 
 	GenericEntity* gun = Create::Entity("ZGun", Vector3(playerInfo->GetPos().x - 5, playerInfo->GetPos().y - 3, playerInfo->GetPos().z - 5), Vector3(2, 2, 2));
-	//theGun->SetEntity(gun);
 	theGun = CSceneGraph::GetInstance()->AddNode(gun);
 	theGun->ApplyRotate(-80.f, 0, 1, 0);
 
@@ -386,9 +385,12 @@ void SceneText::Update(double dt)
 
 	// Update the player position and other details based on keyboard and mouse inputs
 	playerInfo->Update(dt);
-	theGun->SetRotate(180, 0, 1, 0);
-	theGun->SetTranslate(Vector3(playerInfo->GetPos().x - 5, playerInfo->GetPos().y - 3, playerInfo->GetPos().z - 5));
-	//theGun->ApplyTranslate(playerInfo->GetPos().x - 5, playerInfo->GetPos().y - 3, playerInfo->GetPos().z - 5);
+
+	Vector3 gunDirection = (playerInfo->GetTarget() - (playerInfo->GetPos())).Normalized();
+	std::cout << playerInfo->GetTarget() << "\t" << playerInfo->GetPos() << std::endl;
+	theGun->SetRotate(Math::RadianToDegree(atan2(gunDirection.x, gunDirection.z)), 0, 1, 0);
+	theGun->ApplyRotate(Math::RadianToDegree(-gunDirection.y), 1, 0, 0);
+	theGun->SetTranslate(playerInfo->GetPos() + gunDirection * 5.f + Vector3(0, -2, 0));
 	GraphicsManager::GetInstance()->UpdateLights(dt);
 
 	// Update the 2 text object values. NOTE: Can do this in their own class but i'm lazy to do it now :P

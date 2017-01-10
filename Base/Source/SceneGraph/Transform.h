@@ -33,11 +33,10 @@ public:
 	void SetTranslate(Vector3 pos) {
 		Mtx.a[12] = pos.x; Mtx.a[13] = pos.y; Mtx.a[14] = pos.z;
 	}
-	void SetRotate(float angle, const float x, const float y, const float z)
+
+	void SetRotate(const float angle, const float rx, const float ry, const float rz)
 	{
-		Mtx44 tempMtx;
-		tempMtx.SetToRotation(angle, x, y, z);
-		Mtx = tempMtx;
+		Mtx.SetToRotation(angle, rx, ry, rz);
 	}
 	// Apply a rotation to the Transformation Matrix
 	void ApplyRotate(const float angle, const float rx, const float ry, const float rz);
