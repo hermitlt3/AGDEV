@@ -33,6 +33,7 @@
 #include "BigTextSprite.h"
 #include "Steve.h"
 #include "Zombi.h"
+#include "ZGenerator.h"
 
 #include <iostream>
 using namespace std;
@@ -337,6 +338,13 @@ void SceneText::Init()
 	Create::BigText("KillNPC", Vector3(-475, 300, 150), 90, Vector3(200, 75, 200));
 	Create::BigText("TextOR", Vector3(-475, 280, 0), 90, Vector3(50, 50, 50));
 	Create::BigText("TextTOSTART", Vector3(-475, 210, 0), 90, Vector3(200, 75, 200));
+
+	zombieGtr = new ZGenerator();
+	zombieGtr->SetStart(Vector3(-450, 0, -200));
+	zombieGtr->SetEnd(Vector3(-300, 0, 200));
+
+	startSGenerate = false;
+	startZGenerate = false;
 }
 
 void SceneText::Update(double dt)
@@ -345,7 +353,12 @@ void SceneText::Update(double dt)
 	mill->Update(dt);
 	theZombie->Update(dt);
 	theNPC->Update(dt);
-
+	zombieGtr->GenerateZombies(playerInfo->GetPos());
+	
+	if (theZombie->GetIsDead() && !startSGenerate) {
+		zombieGtr->SetGenerate(true);
+		startSGenerate = true;
+	}
 	// Incorrect method. But too time consuming to do the correct method for now.
 	if (MouseController::GetInstance()->IsButtonDown(MouseController::LMB)) {
 		if (playerInfo->GetFirstWeapon()->GetMagRound() > 0)
@@ -357,9 +370,6 @@ void SceneText::Update(double dt)
 		fireSprite->ownTimer = fireSprite->stopTimer;
 		fireSprite->isPressed = false;
 	}
-
-	//if (theEnemy->GetIsDead)
-
 
 	// Update our entities
 	EntityManager::GetInstance()->Update(dt);

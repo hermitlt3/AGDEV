@@ -13,7 +13,8 @@ legless(false),
 isDead(false),
 m_dSpeed(20.0),
 waypointIndex(1),
-currIndex(0)
+currIndex(0),
+target(Vector3(0, -1000, 0))
 {
 }
 
@@ -83,36 +84,45 @@ void CZombie::Update(double dt)
 			legless = true;
 		}
 	}
-	if (CSceneGraph::GetInstance()->GetNode(bodyParts[3]))
+	if (!CSceneGraph::GetInstance()->GetNode(bodyParts[3]))
 	{
 		isDead = true;
 	}
 
 	if (CSceneGraph::GetInstance()->GetNode(bodyParts[3])) {
-		if (CSceneGraph::GetInstance()->GetNode(bodyParts[3])->GetNodeLocalTransform().GetTranslate().x <
-			wayPoints[waypointIndex].x + 1.f &&
-			CSceneGraph::GetInstance()->GetNode(bodyParts[3])->GetNodeLocalTransform().GetTranslate().x >
-			wayPoints[waypointIndex].x - 1.f &&
-			CSceneGraph::GetInstance()->GetNode(bodyParts[3])->GetNodeLocalTransform().GetTranslate().z <
-			wayPoints[waypointIndex].z + 1.f &&
-			CSceneGraph::GetInstance()->GetNode(bodyParts[3])->GetNodeLocalTransform().GetTranslate().z >
-			wayPoints[waypointIndex].z - 1.f)
-		{
-			if (waypointIndex == 3)
-				waypointIndex = 0;
-			else
-				waypointIndex++;
+		if (target.y != -1000.f) {
+			Vector3 movingtowards;
+			movingtowards = (target - CSceneGraph::GetInstance()->GetNode(bodyParts[3])->GetNodeLocalTransform().GetTranslate()).Normalized();
 
-			if (currIndex == 3)
-				currIndex = 0;
-			else
-				currIndex++;
+			if (CSceneGraph::GetInstance()->GetNode(bodyParts[3]))
+				CSceneGraph::GetInstance()->GetNode(bodyParts[3])->ApplyTranslate(dt * movingtowards.x * m_dSpeed, 0, dt * movingtowards.z * m_dSpeed);
+		}
+		else
+		{
+			if (CSceneGraph::GetInstance()->GetNode(bodyParts[3])->GetNodeLocalTransform().GetTranslate().x <
+				wayPoints[waypointIndex].x + 1.f &&
+				CSceneGraph::GetInstance()->GetNode(bodyParts[3])->GetNodeLocalTransform().GetTranslate().x >
+				wayPoints[waypointIndex].x - 1.f &&
+				CSceneGraph::GetInstance()->GetNode(bodyParts[3])->GetNodeLocalTransform().GetTranslate().z <
+				wayPoints[waypointIndex].z + 1.f &&
+				CSceneGraph::GetInstance()->GetNode(bodyParts[3])->GetNodeLocalTransform().GetTranslate().z >
+				wayPoints[waypointIndex].z - 1.f)
+			{
+				if (waypointIndex == 3)
+					waypointIndex = 0;
+				else
+					waypointIndex++;
+
+				if (currIndex == 3)
+					currIndex = 0;
+				else
+					currIndex++;
+			}
+			Vector3 movingtowards;
+			movingtowards = (wayPoints[waypointIndex] - wayPoints[currIndex]).Normalized();
+
+			if (CSceneGraph::GetInstance()->GetNode(bodyParts[3]))
+				CSceneGraph::GetInstance()->GetNode(bodyParts[3])->ApplyTranslate(dt * movingtowards.x * m_dSpeed, 0, dt * movingtowards.z * m_dSpeed);
 		}
 	}
-	Vector3 movingtowards;
-	movingtowards = (wayPoints[waypointIndex] - wayPoints[currIndex]).Normalized();
-
-	if (CSceneGraph::GetInstance()->GetNode(bodyParts[3]))
-		CSceneGraph::GetInstance()->GetNode(bodyParts[3])->ApplyTranslate(dt * movingtowards.x * m_dSpeed, 0, dt * movingtowards.z * m_dSpeed);
-
 }

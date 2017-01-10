@@ -61,6 +61,9 @@
     <Filter Include="Gameobject\BigText">
       <UniqueIdentifier>{57bd8405-61ad-48f4-a0d6-9144a6c67e90}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MobGenerator">
+      <UniqueIdentifier>{f5bd307b-fcbb-490c-b8e7-b8bbda807c1d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp">
@@ -177,6 +180,9 @@
     <ClCompile Include="Source\Zombi.cpp">
       <Filter>Models</Filter>
     </ClCompile>
+    <ClCompile Include="Source\ZGenerator.cpp">
+      <Filter>MobGenerator</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -289,6 +295,9 @@
     </ClInclude>
     <ClInclude Include="Source\Zombi.h">
       <Filter>Models</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ZGenerator.h">
+      <Filter>MobGenerator</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

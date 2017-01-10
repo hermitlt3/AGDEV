@@ -48,6 +48,7 @@
     <ClCompile Include="Source\WeaponInfo\Pistol.cpp" />
     <ClCompile Include="Source\WeaponInfo\WeaponInfo.cpp" />
     <ClCompile Include="Source\Windmill.cpp" />
+    <ClCompile Include="Source\ZGenerator.cpp" />
     <ClCompile Include="Source\Zombi.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -87,6 +88,7 @@
     <ClInclude Include="Source\WeaponInfo\Pistol.h" />
     <ClInclude Include="Source\WeaponInfo\WeaponInfo.h" />
     <ClInclude Include="Source\Windmill.h" />
+    <ClInclude Include="Source\ZGenerator.h" />
     <ClInclude Include="Source\Zombi.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

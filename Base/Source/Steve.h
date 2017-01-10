@@ -23,6 +23,8 @@ public:
 
 	bool GetIsDead() { return isDead; }
 
+	void SetTarget(Vector3 target) { this->target = target; }
+	
 	void SetWayPoints(Vector3 a, Vector3 b, Vector3 c, Vector3 d) {
 		wayPoints[0] = a;
 		wayPoints[1] = b;
@@ -35,9 +37,9 @@ private:
 	GenericEntity* bodyParts[6];
 
 	Vector3 wayPoints[4];
+	Vector3 target;
 
 	double m_dSpeed;
-	bool legless;
 	bool isDead;
 	int waypointIndex;
 	int currIndex;

@@ -5,6 +5,7 @@
 class Mesh;
 class GroundEntity;
 class GenericEntity;
+
 class CZombie
 {
 public:
@@ -30,11 +31,13 @@ public:
 		wayPoints[3] = d;
 	}
 
+	void SetTarget(Vector3 target) { this->target = target; }
 private:
 	GroundEntity* m_pTerrain;
 	GenericEntity* bodyParts[6];
 
 	Vector3 wayPoints[4];
+	Vector3 target;
 
 	double m_dSpeed;
 	bool legless;

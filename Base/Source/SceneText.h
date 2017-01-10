@@ -20,6 +20,7 @@ class GenericEntity;
 class GroundEntity;
 class CZombie;
 class CSteve;
+class ZGenerator;
 
 //using namespace irrklang;
 class SceneText : public Scene
@@ -49,9 +50,11 @@ private:
 	Windmill *mill;
 	CSceneNode* theGun;
 	BulletfireSprite* fireSprite;
-
+	ZGenerator* zombieGtr;
 	//ISoundEngine* Sound_Engine;
 	//ISound* Sound;
+	bool startZGenerate;
+	bool startSGenerate;
 
 	static SceneText* sInstance; // The pointer to the object that gets registered
 };
