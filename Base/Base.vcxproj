@@ -14,9 +14,9 @@
     <ClCompile Include="Source\AnimationHelper.cpp" />
     <ClCompile Include="Source\Application.cpp" />
     <ClCompile Include="Source\Barrel.cpp" />
+    <ClCompile Include="Source\BigTextSprite.cpp" />
     <ClCompile Include="Source\BulletfireSprite.cpp" />
     <ClCompile Include="Source\Crate.cpp" />
-    <ClCompile Include="Source\Enemy\Zombie.cpp" />
     <ClCompile Include="Source\EntityManager.cpp" />
     <ClCompile Include="Source\FPSCamera.cpp" />
     <ClCompile Include="Source\GenericEntity.cpp" />
@@ -41,20 +41,22 @@
     <ClCompile Include="Source\SpatialPartition\SpatialPartition.cpp" />
     <ClCompile Include="Source\SpriteAnimation.cpp" />
     <ClCompile Include="Source\SpriteEntity.cpp" />
+    <ClCompile Include="Source\Steve.cpp" />
     <ClCompile Include="Source\TextEntity.cpp" />
     <ClCompile Include="Source\WeaponInfo\GrenadeThrow.cpp" />
     <ClCompile Include="Source\WeaponInfo\LaserBlaster.cpp" />
     <ClCompile Include="Source\WeaponInfo\Pistol.cpp" />
     <ClCompile Include="Source\WeaponInfo\WeaponInfo.cpp" />
     <ClCompile Include="Source\Windmill.cpp" />
+    <ClCompile Include="Source\Zombi.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\AnimationHelper.h" />
     <ClInclude Include="Source\Application.h" />
     <ClInclude Include="Source\Barrel.h" />
+    <ClInclude Include="Source\BigTextSprite.h" />
     <ClInclude Include="Source\BulletfireSprite.h" />
     <ClInclude Include="Source\Crate.h" />
-    <ClInclude Include="Source\Enemy\Zombie.h" />
     <ClInclude Include="Source\EntityManager.h" />
     <ClInclude Include="Source\FPSCamera.h" />
     <ClInclude Include="Source\GenericEntity.h" />
@@ -78,12 +80,14 @@
     <ClInclude Include="Source\SpatialPartition\SpatialPartition.h" />
     <ClInclude Include="Source\SpriteAnimation.h" />
     <ClInclude Include="Source\SpriteEntity.h" />
+    <ClInclude Include="Source\Steve.h" />
     <ClInclude Include="Source\TextEntity.h" />
     <ClInclude Include="Source\WeaponInfo\GrenadeThrow.h" />
     <ClInclude Include="Source\WeaponInfo\LaserBlaster.h" />
     <ClInclude Include="Source\WeaponInfo\Pistol.h" />
     <ClInclude Include="Source\WeaponInfo\WeaponInfo.h" />
     <ClInclude Include="Source\Windmill.h" />
+    <ClInclude Include="Source\Zombi.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{9B172635-4E2B-46F1-A403-08F4194D00F5}</ProjectGuid>

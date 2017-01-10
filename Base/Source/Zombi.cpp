@@ -1,15 +1,19 @@
-#include "Zombie.h"
-#include "../EntityManager.h"
+#include "Zombi.h"
+#include "EntityManager.h"
 #include "GraphicsManager.h"
 #include "RenderHelper.h"
-#include "../GenericEntity.h"
-#include "../GroundEntity.h"
-#include "../SceneGraph/SceneNode.h"
-#include "../SceneGraph/SceneGraph.h"
+#include "GenericEntity.h"
+#include "GroundEntity.h"
+#include "SceneGraph/SceneNode.h"
+#include "SceneGraph/SceneGraph.h"
 
 CZombie::CZombie() :
-	m_pTerrain(NULL),
-	legless(false)
+m_pTerrain(NULL),
+legless(false),
+isDead(false),
+m_dSpeed(20.0),
+waypointIndex(1),
+currIndex(0)
 {
 }
 
@@ -69,8 +73,6 @@ GroundEntity* CZombie::GetTerrain(void)
 // Update
 void CZombie::Update(double dt)
 {
-	if (CSceneGraph::GetInstance()->GetNode(bodyParts[3]))
-		CSceneGraph::GetInstance()->GetNode(bodyParts[3])->ApplyTranslate(dt * -10, 0, 0);
 	if (!CSceneGraph::GetInstance()->GetNode(bodyParts[4]) &&
 		!CSceneGraph::GetInstance()->GetNode(bodyParts[5]))
 	{
@@ -81,4 +83,36 @@ void CZombie::Update(double dt)
 			legless = true;
 		}
 	}
+	if (CSceneGraph::GetInstance()->GetNode(bodyParts[3]))
+	{
+		isDead = true;
+	}
+
+	if (CSceneGraph::GetInstance()->GetNode(bodyParts[3])) {
+		if (CSceneGraph::GetInstance()->GetNode(bodyParts[3])->GetNodeLocalTransform().GetTranslate().x <
+			wayPoints[waypointIndex].x + 1.f &&
+			CSceneGraph::GetInstance()->GetNode(bodyParts[3])->GetNodeLocalTransform().GetTranslate().x >
+			wayPoints[waypointIndex].x - 1.f &&
+			CSceneGraph::GetInstance()->GetNode(bodyParts[3])->GetNodeLocalTransform().GetTranslate().z <
+			wayPoints[waypointIndex].z + 1.f &&
+			CSceneGraph::GetInstance()->GetNode(bodyParts[3])->GetNodeLocalTransform().GetTranslate().z >
+			wayPoints[waypointIndex].z - 1.f)
+		{
+			if (waypointIndex == 3)
+				waypointIndex = 0;
+			else
+				waypointIndex++;
+
+			if (currIndex == 3)
+				currIndex = 0;
+			else
+				currIndex++;
+		}
+	}
+	Vector3 movingtowards;
+	movingtowards = (wayPoints[waypointIndex] - wayPoints[currIndex]).Normalized();
+
+	if (CSceneGraph::GetInstance()->GetNode(bodyParts[3]))
+		CSceneGraph::GetInstance()->GetNode(bodyParts[3])->ApplyTranslate(dt * movingtowards.x * m_dSpeed, 0, dt * movingtowards.z * m_dSpeed);
+
 }

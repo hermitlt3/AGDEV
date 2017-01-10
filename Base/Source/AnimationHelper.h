@@ -4,7 +4,7 @@
 #include <list>
 
 class SpriteAnimation;
-class Animation;
+struct Animation;
 class AnimHelper : public Singleton<AnimHelper>
 {
 	friend class AnimHelper;
