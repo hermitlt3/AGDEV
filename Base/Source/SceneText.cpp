@@ -339,9 +339,9 @@ void SceneText::Init()
 	Create::BigText("TextOR", Vector3(-475, 280, 0), 90, Vector3(50, 50, 50));
 	Create::BigText("TextTOSTART", Vector3(-475, 210, 0), 90, Vector3(200, 75, 200));
 
-	zombieGtr = new ZGenerator();
-	zombieGtr->SetStart(Vector3(-450, 0, -200));
-	zombieGtr->SetEnd(Vector3(-300, 0, 200));
+	zGtr = new ZGenerator();
+	zGtr->SetStart(Vector3(-450, 0, -200));
+	zGtr->SetEnd(Vector3(-300, 0, 200));
 
 	startSGenerate = false;
 	startZGenerate = false;
@@ -349,16 +349,24 @@ void SceneText::Init()
 
 void SceneText::Update(double dt)
 {
+	std::string type = "";
 	AnimHelper::GetInstance()->UpdateAnimation(dt);
 	mill->Update(dt);
 	theZombie->Update(dt);
 	theNPC->Update(dt);
-	zombieGtr->GenerateZombies(playerInfo->GetPos());
 	
-	if (theZombie->GetIsDead() && !startSGenerate) {
-		zombieGtr->SetGenerate(true);
+	if (theZombie->GetIsDead() && !startZGenerate) {
+		zGtr->SetGenerate(true);
+		type = "stevie";
+		startZGenerate = true;
+	}
+	else if (theNPC->GetIsDead() && !startSGenerate) {
+		zGtr->SetGenerate(true);
+		type = "zombie";
 		startSGenerate = true;
 	}
+	zGtr->GenerateZombies(playerInfo->GetPos(), type);
+
 	// Incorrect method. But too time consuming to do the correct method for now.
 	if (MouseController::GetInstance()->IsButtonDown(MouseController::LMB)) {
 		if (playerInfo->GetFirstWeapon()->GetMagRound() > 0)

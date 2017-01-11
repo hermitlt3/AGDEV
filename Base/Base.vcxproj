@@ -19,6 +19,7 @@
     <ClCompile Include="Source\Crate.cpp" />
     <ClCompile Include="Source\EntityManager.cpp" />
     <ClCompile Include="Source\FPSCamera.cpp" />
+    <ClCompile Include="Source\Gamepad.cpp" />
     <ClCompile Include="Source\GenericEntity.cpp" />
     <ClCompile Include="Source\GroundEntity.cpp" />
     <ClCompile Include="Source\LevelOfDetails\LevelOfDetails.cpp" />
@@ -60,6 +61,7 @@
     <ClInclude Include="Source\Crate.h" />
     <ClInclude Include="Source\EntityManager.h" />
     <ClInclude Include="Source\FPSCamera.h" />
+    <ClInclude Include="Source\Gamepad.h" />
     <ClInclude Include="Source\GenericEntity.h" />
     <ClInclude Include="Source\GroundEntity.h" />
     <ClInclude Include="Source\LevelOfDetails\LevelOfDetails.h" />

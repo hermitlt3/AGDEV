@@ -64,6 +64,9 @@
     <Filter Include="MobGenerator">
       <UniqueIdentifier>{f5bd307b-fcbb-490c-b8e7-b8bbda807c1d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Controller">
+      <UniqueIdentifier>{8973976a-7631-4648-8ba5-eda5a3384930}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp">
@@ -183,6 +186,9 @@
     <ClCompile Include="Source\ZGenerator.cpp">
       <Filter>MobGenerator</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Gamepad.cpp">
+      <Filter>Controller</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -298,6 +304,9 @@
     </ClInclude>
     <ClInclude Include="Source\ZGenerator.h">
       <Filter>MobGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Gamepad.h">
+      <Filter>Controller</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

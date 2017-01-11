@@ -392,7 +392,7 @@ bool EntityManager::CheckForCollision(double dt)
 			}
 		}
 		
-		else if ((*it)->HasCollider())
+		/*else if ((*it)->HasCollider())
 		{
 			vector<EntityBase*> temp;
 			if(CSceneGraph::GetInstance()->GetNode(*it) == nullptr)
@@ -438,11 +438,11 @@ bool EntityManager::CheckForCollision(double dt)
 										CSceneGraph::GetInstance()->DeleteNode(*it2);
 								}
 							}
-						}/**/
+						}/*
 					//}
-				}/**/
+				}/*
 			}
-		}/**/
+		}*/
 	}
 	return false;
 }

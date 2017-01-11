@@ -1,5 +1,6 @@
 #include "ZGenerator.h"
 #include "Zombi.h"
+#include "Steve.h"
 
 ZGenerator::ZGenerator() :
 doGenerate(false),
@@ -19,7 +20,7 @@ void ZGenerator::Update(double dt)
 	
 }
 
-void ZGenerator::GenerateZombies(Vector3 target)
+void ZGenerator::GenerateZombies(Vector3 target, std::string type)
 {
 	if (doGenerate)
 	{
@@ -27,9 +28,18 @@ void ZGenerator::GenerateZombies(Vector3 target)
 		{
 			Vector3 a;
 			a = Vector3(Math::RandFloatMinMax(areaStart.x, areaEnd.x), -3, Math::RandFloatMinMax(areaStart.z, areaEnd.z));
-			CZombie *zomzom = new CZombie();
-			zomzom->Init(a);
-			zomzom->SetTarget(target);
+			if (type == "zombie")
+			{
+				CZombie *zomzom = new CZombie();
+				zomzom->Init(a);
+				zomzom->SetTarget(target);
+			}
+			else if (type == "stevie")
+			{
+				CSteve *stevie = new CSteve();
+				stevie->Init(a);
+				stevie->SetTarget(target);
+			}
 		}
 		doGenerate = false;
 	}

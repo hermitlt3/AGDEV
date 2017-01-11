@@ -50,7 +50,7 @@ private:
 	Windmill *mill;
 	CSceneNode* theGun;
 	BulletfireSprite* fireSprite;
-	ZGenerator* zombieGtr;
+	ZGenerator* zGtr;
 	//ISoundEngine* Sound_Engine;
 	//ISound* Sound;
 	bool startZGenerate;

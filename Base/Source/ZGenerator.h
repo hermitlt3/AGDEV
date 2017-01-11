@@ -1,5 +1,6 @@
 #pragma once
 #include "Vector3.h"
+#include <string>
 
 class ZGenerator
 {
@@ -17,7 +18,7 @@ public:
 	Vector3& GetEnd() { return areaEnd; }
 
 	void Update(double dt);
-	void GenerateZombies(Vector3 target);
+	void GenerateZombies(Vector3 target, std::string type);
 
 private:
 	bool doGenerate;

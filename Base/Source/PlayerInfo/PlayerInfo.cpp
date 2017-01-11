@@ -8,10 +8,12 @@
 #include "../WeaponInfo/Pistol.h"
 #include "../WeaponInfo/LaserBlaster.h"
 #include "../WeaponInfo/GrenadeThrow.h"
+#include "../Gamepad.h"
 
 // Allocating and initializing CPlayerInfo's static data member.  
 // The pointer is allocated but not the object's constructor.
 CPlayerInfo *CPlayerInfo::s_instance = 0;
+Gamepad* Gamepad1 = new Gamepad(1);
 
 CPlayerInfo::CPlayerInfo(void)
 	: m_dSpeed(100.0)
@@ -274,10 +276,15 @@ void CPlayerInfo::Update(double dt)
 {
 	double mouse_diff_x, mouse_diff_y;
 	MouseController::GetInstance()->GetMouseDelta(mouse_diff_x, mouse_diff_y);
-
+	Gamepad1->Update();
 	double camera_yaw = mouse_diff_x * 0.0174555555555556;		// 3.142 / 180.0
 	double camera_pitch = mouse_diff_y * 0.0174555555555556;	// 3.142 / 180.0
 
+	if (!Gamepad1->LStick_InDeadzone())
+	{
+		std::cout << "Axis is at pos " << Gamepad1->LeftStick_X() << " " << Gamepad1->LeftStick_Y() << std::endl;
+		position;
+	}
 	// Update the position if the WASD buttons were activated
 	if (KeyboardController::GetInstance()->IsKeyDown('W') ||
 		KeyboardController::GetInstance()->IsKeyDown('A') ||
