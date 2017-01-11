@@ -189,6 +189,9 @@
     <ClCompile Include="Source\Gamepad.cpp">
       <Filter>Controller</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Enemy\Enemy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -307,6 +310,9 @@
     </ClInclude>
     <ClInclude Include="Source\Gamepad.h">
       <Filter>Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Enemy\Enemy.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

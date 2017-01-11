@@ -18,7 +18,6 @@
     <ClCompile Include="Source\BulletfireSprite.cpp" />
     <ClCompile Include="Source\Crate.cpp" />
     <ClCompile Include="Source\Enemy\Enemy.cpp" />
-    <ClCompile Include="Source\Enemy\Zombie.cpp" />
     <ClCompile Include="Source\EntityManager.cpp" />
     <ClCompile Include="Source\FPSCamera.cpp" />
     <ClCompile Include="Source\Gamepad.cpp" />
@@ -62,7 +61,6 @@
     <ClInclude Include="Source\BulletfireSprite.h" />
     <ClInclude Include="Source\Crate.h" />
     <ClInclude Include="Source\Enemy\Enemy.h" />
-    <ClInclude Include="Source\Enemy\Zombie.h" />
     <ClInclude Include="Source\EntityManager.h" />
     <ClInclude Include="Source\FPSCamera.h" />
     <ClInclude Include="Source\Gamepad.h" />
