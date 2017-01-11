@@ -338,39 +338,84 @@ void CPlayerInfo::Update(double dt)
 		Vector3 rightUV;
 		if (KeyboardController::GetInstance()->IsKeyDown(VK_LEFT) || Gamepad1->RightStick_X() < 0.f)
 		{
-			float yaw = (float)m_dSpeed * (float)dt;
-			Mtx44 rotation;
-			rotation.SetToRotation(yaw, 0, 1, 0);
-			viewUV = rotation * viewUV;
-			target = position + viewUV;
-			rightUV = viewUV.Cross(up);
-			rightUV.y = 0;
-			rightUV.Normalize();
-			up = rightUV.Cross(viewUV).Normalized();
+			if (Gamepad1->RightStick_X() < 0.f)
+			{
+				float yaw = (float)m_dSpeed * (float)dt * -(Gamepad1->RightStick_X());
+				Mtx44 rotation;
+				rotation.SetToRotation(yaw, 0, 1, 0);
+				viewUV = rotation * viewUV;
+				target = position + viewUV;
+				rightUV = viewUV.Cross(up);
+				rightUV.y = 0;
+				rightUV.Normalize();
+				up = rightUV.Cross(viewUV).Normalized();
+			}
+			else
+			{
+				float yaw = (float)m_dSpeed * (float)dt;
+				Mtx44 rotation;
+				rotation.SetToRotation(yaw, 0, 1, 0);
+				viewUV = rotation * viewUV;
+				target = position + viewUV;
+				rightUV = viewUV.Cross(up);
+				rightUV.y = 0;
+				rightUV.Normalize();
+				up = rightUV.Cross(viewUV).Normalized();
+			}
 		}
 		else if (KeyboardController::GetInstance()->IsKeyDown(VK_RIGHT) || Gamepad1->RightStick_X() > 0.f)
 		{
-			float yaw = (float)(-m_dSpeed * (float)dt);
-			Mtx44 rotation;
-			rotation.SetToRotation(yaw, 0, 1, 0);
-			viewUV = rotation * viewUV;
-			target = position + viewUV;
-			rightUV = viewUV.Cross(up);
-			rightUV.y = 0;
-			rightUV.Normalize();
-			up = rightUV.Cross(viewUV).Normalized();
+			if (Gamepad1->RightStick_X() > 0.f)
+			{
+				float yaw = (float)(-m_dSpeed * (float)dt) * (Gamepad1->RightStick_X());
+				Mtx44 rotation;
+				rotation.SetToRotation(yaw, 0, 1, 0);
+				viewUV = rotation * viewUV;
+				target = position + viewUV;
+				rightUV = viewUV.Cross(up);
+				rightUV.y = 0;
+				rightUV.Normalize();
+				up = rightUV.Cross(viewUV).Normalized();
+			}
+			else
+			{
+				float yaw = (float)(-m_dSpeed * (float)dt);
+				Mtx44 rotation;
+				rotation.SetToRotation(yaw, 0, 1, 0);
+				viewUV = rotation * viewUV;
+				target = position + viewUV;
+				rightUV = viewUV.Cross(up);
+				rightUV.y = 0;
+				rightUV.Normalize();
+				up = rightUV.Cross(viewUV).Normalized();
+			}
 		}
 		if (KeyboardController::GetInstance()->IsKeyDown(VK_UP) || Gamepad1->RightStick_Y() > 0.f)
 		{
-			float pitch = (float)(m_dSpeed * (float)dt);
-			rightUV = viewUV.Cross(up);
-			rightUV.y = 0;
-			rightUV.Normalize();
-			up = rightUV.Cross(viewUV).Normalized();
-			Mtx44 rotation;
-			rotation.SetToRotation(pitch, rightUV.x, rightUV.y, rightUV.z);
-			viewUV = rotation * viewUV;
-			target = position + viewUV;
+			if(Gamepad1->RightStick_Y() > 0.f)
+			{
+				float pitch = (float)(m_dSpeed * (float)dt) * Gamepad1->RightStick_Y();
+				rightUV = viewUV.Cross(up);
+				rightUV.y = 0;
+				rightUV.Normalize();
+				up = rightUV.Cross(viewUV).Normalized();
+				Mtx44 rotation;
+				rotation.SetToRotation(pitch, rightUV.x, rightUV.y, rightUV.z);
+				viewUV = rotation * viewUV;
+				target = position + viewUV;
+			}
+			else
+			{
+				float pitch = (float)(m_dSpeed * (float)dt);
+				rightUV = viewUV.Cross(up);
+				rightUV.y = 0;
+				rightUV.Normalize();
+				up = rightUV.Cross(viewUV).Normalized();
+				Mtx44 rotation;
+				rotation.SetToRotation(pitch, rightUV.x, rightUV.y, rightUV.z);
+				viewUV = rotation * viewUV;
+				target = position + viewUV;
+			}
 		}
 		else if (KeyboardController::GetInstance()->IsKeyDown(VK_DOWN) || Gamepad1->RightStick_Y() < 0.f)
 		{
