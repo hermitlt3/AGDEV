@@ -81,6 +81,7 @@ void CSteve::Update(double dt)
 		!CSceneGraph::GetInstance()->GetNode(bodyParts[5]))
 	{
 		isDead = true;
+		CSceneGraph::GetInstance()->DeleteNode(bodyParts[3]);
 	}
 
 	if (CSceneGraph::GetInstance()->GetNode(bodyParts[3])) {
