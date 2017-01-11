@@ -16,18 +16,18 @@ CPlayerInfo *CPlayerInfo::s_instance = 0;
 Gamepad* Gamepad1 = new Gamepad(1);
 
 CPlayerInfo::CPlayerInfo(void)
-	: m_dSpeed(100.0)
-	, m_dAcceleration(10.0)
-	, m_bJumpUpwards(false)
-	, m_dJumpSpeed(10.0)
-	, m_dJumpAcceleration(-10.0)
-	, m_bFallDownwards(false)
-	, m_dFallSpeed(0.0)
-	, m_dFallAcceleration(-10.0)
-	, attachedCamera(NULL)
-	, m_pTerrain(NULL)
-	, primaryWeapon(NULL)
-	, secondaryWeapon(NULL)
+: m_dSpeed(100.0)
+, m_dAcceleration(10.0)
+, m_bJumpUpwards(false)
+, m_dJumpSpeed(10.0)
+, m_dJumpAcceleration(-10.0)
+, m_bFallDownwards(false)
+, m_dFallSpeed(0.0)
+, m_dFallAcceleration(-10.0)
+, attachedCamera(NULL)
+, m_pTerrain(NULL)
+, primaryWeapon(NULL)
+, secondaryWeapon(NULL)
 {
 }
 
@@ -50,9 +50,9 @@ CPlayerInfo::~CPlayerInfo(void)
 void CPlayerInfo::Init(void)
 {
 	// Set the default values
-	defaultPosition.Set(0,0,400);
-	defaultTarget.Set(0,0,0);
-	defaultUp.Set(0,1,0);
+	defaultPosition.Set(0, 0, 400);
+	defaultTarget.Set(0, 0, 0);
+	defaultUp.Set(0, 1, 0);
 
 	// Set the current values
 	position.Set(400, 0, 0);
@@ -60,7 +60,7 @@ void CPlayerInfo::Init(void)
 	up.Set(0, 1, 0);
 
 	// Set Boundary
-	maxBoundary.Set(1,1,1);
+	maxBoundary.Set(1, 1, 1);
 	minBoundary.Set(-1, -1, -1);
 
 	// Set the pistol as the primary weapon
@@ -270,8 +270,8 @@ void CPlayerInfo::UpdateFreeFall(double dt)
 }
 
 /********************************************************************************
- Hero Update
- ********************************************************************************/
+Hero Update
+********************************************************************************/
 void CPlayerInfo::Update(double dt)
 {
 	double mouse_diff_x, mouse_diff_y;
@@ -289,26 +289,32 @@ void CPlayerInfo::Update(double dt)
 	if (KeyboardController::GetInstance()->IsKeyDown('W') ||
 		KeyboardController::GetInstance()->IsKeyDown('A') ||
 		KeyboardController::GetInstance()->IsKeyDown('S') ||
-		KeyboardController::GetInstance()->IsKeyDown('D'))
+		KeyboardController::GetInstance()->IsKeyDown('D') ||
+		!Gamepad1->LStick_InDeadzone())
 	{
 		Vector3 viewVector = target - position;
 		Vector3 rightUV;
-		if (KeyboardController::GetInstance()->IsKeyDown('W'))
+		if (KeyboardController::GetInstance()->IsKeyDown('W') || Gamepad1->LeftStick_Y() > 0.f)
 		{
 			position += viewVector.Normalized() * (float)m_dSpeed * (float)dt;
 		}
-		else if (KeyboardController::GetInstance()->IsKeyDown('S'))
+		else if (KeyboardController::GetInstance()->IsKeyDown('S') || Gamepad1->LeftStick_Y() < 0.f)
 		{
 			position -= viewVector.Normalized() * (float)m_dSpeed * (float)dt;
 		}
-		if (KeyboardController::GetInstance()->IsKeyDown('A'))
+		if (KeyboardController::GetInstance()->IsKeyDown('A') || Gamepad1->LeftStick_X() < 0.f)
 		{
 			rightUV = (viewVector.Normalized()).Cross(up);
 			rightUV.y = 0;
 			rightUV.Normalize();
-			position -= rightUV * (float)m_dSpeed * (float)dt;
+			if (Gamepad1->LeftStick_X() < 0.f)
+			{
+				position -= rightUV * (float)m_dSpeed * (float)dt * -(Gamepad1->LeftStick_X());
+			}
+			else
+				position -= rightUV * (float)m_dSpeed * (float)dt;
 		}
-		else if (KeyboardController::GetInstance()->IsKeyDown('D'))
+		else if (KeyboardController::GetInstance()->IsKeyDown('D') || Gamepad1->LeftStick_X() > 0.f)
 		{
 			rightUV = (viewVector.Normalized()).Cross(up);
 			rightUV.y = 0;
@@ -316,7 +322,7 @@ void CPlayerInfo::Update(double dt)
 			position += rightUV * (float)m_dSpeed * (float)dt;
 		}
 		// Constrain the position
-		Constrain();
+		//Constrain();
 		// Update the target
 		target = position + viewVector;
 	}
@@ -325,11 +331,12 @@ void CPlayerInfo::Update(double dt)
 	if (KeyboardController::GetInstance()->IsKeyDown(VK_LEFT) ||
 		KeyboardController::GetInstance()->IsKeyDown(VK_RIGHT) ||
 		KeyboardController::GetInstance()->IsKeyDown(VK_UP) ||
-		KeyboardController::GetInstance()->IsKeyDown(VK_DOWN))
+		KeyboardController::GetInstance()->IsKeyDown(VK_DOWN) ||
+		!Gamepad1->RStick_InDeadzone())
 	{
 		Vector3 viewUV = (target - position).Normalized();
 		Vector3 rightUV;
-		if (KeyboardController::GetInstance()->IsKeyDown(VK_LEFT))
+		if (KeyboardController::GetInstance()->IsKeyDown(VK_LEFT) || Gamepad1->RightStick_X() < 0.f)
 		{
 			float yaw = (float)m_dSpeed * (float)dt;
 			Mtx44 rotation;
@@ -341,7 +348,7 @@ void CPlayerInfo::Update(double dt)
 			rightUV.Normalize();
 			up = rightUV.Cross(viewUV).Normalized();
 		}
-		else if (KeyboardController::GetInstance()->IsKeyDown(VK_RIGHT))
+		else if (KeyboardController::GetInstance()->IsKeyDown(VK_RIGHT) || Gamepad1->RightStick_X() > 0.f)
 		{
 			float yaw = (float)(-m_dSpeed * (float)dt);
 			Mtx44 rotation;
@@ -353,7 +360,7 @@ void CPlayerInfo::Update(double dt)
 			rightUV.Normalize();
 			up = rightUV.Cross(viewUV).Normalized();
 		}
-		if (KeyboardController::GetInstance()->IsKeyDown(VK_UP))
+		if (KeyboardController::GetInstance()->IsKeyDown(VK_UP) || Gamepad1->RightStick_Y() > 0.f)
 		{
 			float pitch = (float)(m_dSpeed * (float)dt);
 			rightUV = viewUV.Cross(up);
@@ -365,7 +372,7 @@ void CPlayerInfo::Update(double dt)
 			viewUV = rotation * viewUV;
 			target = position + viewUV;
 		}
-		else if (KeyboardController::GetInstance()->IsKeyDown(VK_DOWN))
+		else if (KeyboardController::GetInstance()->IsKeyDown(VK_DOWN) || Gamepad1->RightStick_Y() < 0.f)
 		{
 			float pitch = (float)(-m_dSpeed * (float)dt);
 			rightUV = viewUV.Cross(up);
@@ -409,14 +416,16 @@ void CPlayerInfo::Update(double dt)
 	}
 
 	// If the user presses SPACEBAR, then make him jump
-	if (KeyboardController::GetInstance()->IsKeyDown(VK_SPACE) &&
+	if ((KeyboardController::GetInstance()->IsKeyDown(VK_SPACE)
+		|| Gamepad1->GetButtonDown(XButtons.A)) &&
 		position.y == m_pTerrain->GetTerrainHeight(position))
 	{
 		SetToJumpUpwards(true);
 	}
 
 	// Update the weapons
-	if (KeyboardController::GetInstance()->IsKeyReleased('R'))
+	if (KeyboardController::GetInstance()->IsKeyReleased('R')
+		|| Gamepad1->GetButtonDown(XButtons.Y))
 	{
 		if (primaryWeapon)
 		{
@@ -435,13 +444,14 @@ void CPlayerInfo::Update(double dt)
 		secondaryWeapon->Update(dt);
 
 	// if Mouse Buttons were activated, then act on them
-	//if (MouseController::GetInstance()->IsButtonPressed(MouseController::LMB))
-	if (MouseController::GetInstance()->IsButtonDown(MouseController::LMB))
+	if (MouseController::GetInstance()->IsButtonPressed(MouseController::LMB)
+		|| Gamepad1->GetButtonDown(XButtons.R_Shoulder))
 	{
 		if (primaryWeapon)
 			primaryWeapon->Discharge(position, target, this);
 	}
-	else if (MouseController::GetInstance()->IsButtonPressed(MouseController::RMB))
+	else if (MouseController::GetInstance()->IsButtonPressed(MouseController::RMB)
+		|| Gamepad1->GetButtonDown(XButtons.L_Shoulder))
 	{
 		if (secondaryWeapon)
 			secondaryWeapon->Discharge(position, target, this);
@@ -465,6 +475,7 @@ void CPlayerInfo::Update(double dt)
 		attachedCamera->SetCameraTarget(target);
 		attachedCamera->SetCameraUp(up);
 	}
+	Gamepad1->RefreshState();
 }
 
 // Constrain the position within the borders
