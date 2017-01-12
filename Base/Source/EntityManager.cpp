@@ -345,57 +345,74 @@ bool EntityManager::CheckLineSegmentPlane(	Vector3 line_start, Vector3 line_end,
 // Check if any Collider is colliding with another Collider
 bool EntityManager::CheckForCollision(double dt)
 {
-	for (std::list<EntityBase*>::iterator it = entityList.begin(); it != entityList.end(); ++it)
+	std::list<EntityBase*>::iterator colliderThis, colliderThisEnd;
+	std::list<EntityBase*>::iterator colliderThat, colliderThatEnd;
+
+	colliderThisEnd = entityList.end();
+	for (colliderThis = entityList.begin(); colliderThis != colliderThisEnd; ++colliderThis)
 	{
-		/*if ((*it)->GetIsLaser())
+		// Check if this entity is a CLaser type
+		if ((*colliderThis)->GetIsLaser())
 		{
-			CLaser* Laser = dynamic_cast<CLaser*>(*it);
-			if (Laser->GetPosition().x > (CSpatialPartition::GetInstance()->GetxSize() >> 1) ||
-				Laser->GetPosition().x < -(CSpatialPartition::GetInstance()->GetxSize() >> 1) ||
-				Laser->GetPosition().z >(CSpatialPartition::GetInstance()->GetzSize() >> 1) ||
-				Laser->GetPosition().z < -(CSpatialPartition::GetInstance()->GetzSize() >> 1))
-				continue;
+			// Dynamic cast it to a CLaser class
+			CLaser* thisEntity = dynamic_cast<CLaser*>(*colliderThis);
 
-			vector<EntityBase*> temp = CSpatialPartition::GetInstance()->GetObjects(Laser->GetPosition(), 0);
-
-			for (std::vector<EntityBase*>::iterator it2 = temp.begin(); it2 != temp.end(); ++it2)
+			// Check for collision with another collider class
+			colliderThatEnd = entityList.end();
+			int counter = 0;
+			for (colliderThat = entityList.begin(); colliderThat != colliderThatEnd; ++colliderThat)
 			{
-				if (*it == *it2)
+				if (colliderThat == colliderThis)
 					continue;
-				if ((*it2) && (*it2)->HasCollider())
+				if ((*colliderThat)->HasCollider())
 				{
-					Vector3 thatMinAABB, thatMaxAABB;
-					CCollider *it2Collider = dynamic_cast<CCollider*>(*it2);
-					if (CSceneGraph::GetInstance()->GetNode(*it2) != nullptr)
+					Vector3 hitPosition = Vector3(0, 0, 0);
+
+					// Get the minAABB and maxAABB for (*colliderThat)
+					CCollider *thatCollider = dynamic_cast<CCollider*>(*colliderThat);
+					Vector3 thatMaxAABB;
+					Vector3 thatMinAABB;
+					if (CSceneGraph::GetInstance()->GetNode(*colliderThat) != nullptr)
 					{
-						CSceneNode* tempNode = CSceneGraph::GetInstance()->GetNode(*it2);
-						thatMinAABB = tempNode->GetNodeLocalTransform().GetTranslate() + it2Collider->GetMinAABB();
-						thatMaxAABB = tempNode->GetNodeLocalTransform().GetTranslate() + it2Collider->GetMaxAABB();
+						CSceneNode* tempNode = CSceneGraph::GetInstance()->GetNode(*colliderThat);
+						thatMinAABB = tempNode->GetNodeLocalTransform().GetTranslate() + thatCollider->GetMinAABB();
+						thatMaxAABB = tempNode->GetNodeLocalTransform().GetTranslate() + thatCollider->GetMaxAABB();
 					}
 					else
 					{
-						thatMinAABB = (*it2)->GetPosition() + it2Collider->GetMinAABB();
-						thatMaxAABB = (*it2)->GetPosition() + it2Collider->GetMaxAABB();
+						thatMinAABB = (*colliderThat)->GetPosition() + thatCollider->GetMinAABB();
+						thatMaxAABB = (*colliderThat)->GetPosition() + thatCollider->GetMaxAABB();
 					}
-					if (CheckLineSegmentPlane(Laser->GetPosition(),
-						Laser->GetPosition() - Laser->GetDirection() * Laser->GetLength(),
+
+					if (CheckLineSegmentPlane(thisEntity->GetPosition(),
+						thisEntity->GetPosition() - thisEntity->GetDirection() * thisEntity->GetLength(),
 						thatMinAABB, thatMaxAABB,
-						Vector3(0, 0, 0)) == true)
+						hitPosition) == true)
 					{
-						Laser->SetIsDone(true);
-						if (CSceneGraph::GetInstance()->GetNode(*it2) == nullptr)
-							(*it2)->SetIsDone(true);
-						else
-							CSceneGraph::GetInstance()->DeleteNode(*it2);
+						(*colliderThis)->SetIsDone(true);
+						(*colliderThat)->SetIsDone(true);
+
+
+						// Remove from Scene Graph
+						if (CSceneGraph::GetInstance()->DeleteNode((*colliderThis)) == true)
+						{
+							cout << "*** This Entity removed ***" << endl;
+						}
+						// Remove from Scene Graph
+						if (CSceneGraph::GetInstance()->DeleteNode((*colliderThat)) == true)
+						{
+							cout << "*** That Entity removed ***" << endl;
+						}
 					}
 				}
 			}
 		}
-		
-		else*/ if ((*it)->HasCollider())
+	}
+	/*else 
+		if ((*it)->HasCollider())
 		{
 			vector<EntityBase*> temp;
-			if(CSceneGraph::GetInstance()->GetNode(*it) == nullptr)
+			if (CSceneGraph::GetInstance()->GetNode(*it) == nullptr)
 			{
 				if ((*it)->GetPosition().x > (CSpatialPartition::GetInstance()->GetxSize() >> 1) ||
 					(*it)->GetPosition().x < -(CSpatialPartition::GetInstance()->GetxSize() >> 1) ||
@@ -413,14 +430,16 @@ bool EntityManager::CheckForCollision(double dt)
 					continue;
 				temp = CSpatialPartition::GetInstance()->GetObjects(CSceneGraph::GetInstance()->GetNode(*it)->GetNodeLocalTransform().GetTranslate(), 0);
 			}
-
-			for (std::vector<EntityBase*>::iterator it2 = temp.begin(); it2 != temp.end();)
+			std::list<EntityBase*> myList(temp.begin(), temp.end());
+			for (std::list<EntityBase*>::iterator it2 = myList.begin(); it2 != myList.end();)
 			{
 				if ((*it2) == (*it))
 				{
 					++it2;
 					continue;
 				}
+				if (it2 == myList.end())
+					cout << "fucking bug" << endl;
 				if ((*it2)->HasCollider())
 				{
 					if (CheckAABBCollision(*it, *it2))
@@ -430,29 +449,26 @@ bool EntityManager::CheckForCollision(double dt)
 						{
 							if (p->GetType() != GRENADE)
 							{
-								p->SetIsDone(true);
-								if (CSceneGraph::GetInstance()->GetNode(*it2) == nullptr)
+								if (CSceneGraph::GetInstance()->DeleteNode(*it2))
 								{
-									(*it2)->SetIsDone(true);
-									it2 = temp.erase(it2);
+									cout << "Node destroyed\n";
+									it2 = myList.erase(it2);
+									cout << CSpatialPartition::GetInstance()->GetObjects((*it2)->GetPosition(), 0).size() << "\t" << myList.size() << endl;
 								}
 								else
 								{
-									CSceneGraph::GetInstance()->DeleteNode(*it2);
-									++it2;
+									(*it2)->SetIsDone(true);
+									it2 = myList.erase(it2);
 								}
+								(*it)->SetIsDone(true);
 							}
 						}
-						else
-							++it2;
+						else  ++it2;
 					}
-					else
-						++it2;
+					else  ++it2;
 				}
-				else
-					++it2;
+				else  ++it2;
 			}
-		}
-	}
+		}*/
 	return false;
 }

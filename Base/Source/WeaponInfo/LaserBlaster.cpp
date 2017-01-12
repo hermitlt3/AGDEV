@@ -49,9 +49,9 @@ void CLaserBlaster::Discharge(Vector3 position, Vector3 target, CPlayerInfo* _so
 			CLaser* aLaser = Create::Laser("laser",
 											position,
 											_direction,
-											10.0f,
+											15.0f,
 											2.0f,
-											400.0f,
+											700.0f,
 											_source);
 			aLaser->SetIsLaser(true);
 			aLaser->SetCollider(false);

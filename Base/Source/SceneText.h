@@ -8,6 +8,7 @@
 #include "FPSCamera.h"
 #include "Mesh.h"
 #include "MatrixStack.h"
+#include "irrKlang.h"
 
 class ShaderProgram;
 class SceneManager;
@@ -22,7 +23,7 @@ class CZombie;
 class CSteve;
 class ZGenerator;
 
-//using namespace irrklang;
+using namespace irrklang;
 class SceneText : public Scene
 {	
 public:
@@ -51,8 +52,8 @@ private:
 	CSceneNode* theGun;
 	BulletfireSprite* fireSprite;
 	ZGenerator* zGtr;
-	//ISoundEngine* Sound_Engine;
-	//ISound* Sound;
+	ISoundEngine* Sound_Engine;
+	ISound* Sound;
 	bool startZGenerate;
 	bool startSGenerate;
 
