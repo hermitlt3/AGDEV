@@ -31,6 +31,7 @@ public:
 		wayPoints[2] = c;
 		wayPoints[3] = d;
 	}
+	void Kill();
 
 private:
 	GroundEntity* m_pTerrain;

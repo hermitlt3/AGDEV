@@ -2,6 +2,8 @@
 #include "Vector3.h"
 #include <string>
 
+class CZombie;
+class CSteve;
 class ZGenerator
 {
 public:
@@ -20,8 +22,11 @@ public:
 	void Update(double dt);
 	void GenerateZombies(Vector3 target, std::string type);
 
+	bool IsAllDead();
 private:
 	bool doGenerate;
 	Vector3 areaStart;
 	Vector3 areaEnd;
+	CZombie* zoms[5];
+	CSteve* stevs[5];
 };

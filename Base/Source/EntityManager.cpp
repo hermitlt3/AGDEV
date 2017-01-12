@@ -345,6 +345,70 @@ bool EntityManager::CheckLineSegmentPlane(	Vector3 line_start, Vector3 line_end,
 // Check if any Collider is colliding with another Collider
 bool EntityManager::CheckForCollision(double dt)
 {
+	/*for (std::list<EntityBase*>::iterator it = entityList.begin(); it != entityList.end(); ++it)
+	{
+		if ((*it)->GetIsLaser())
+		{
+			CLaser* Laser = dynamic_cast<CLaser*>(*it);
+			if (Laser->GetPosition().x > (CSpatialPartition::GetInstance()->GetxSize() >> 1) ||
+				Laser->GetPosition().x < -(CSpatialPartition::GetInstance()->GetxSize() >> 1) ||
+				Laser->GetPosition().z >(CSpatialPartition::GetInstance()->GetzSize() >> 1) ||
+				Laser->GetPosition().z < -(CSpatialPartition::GetInstance()->GetzSize() >> 1))
+				continue;
+			vector<EntityBase*> temp = CSpatialPartition::GetInstance()->GetObjects(Laser->GetPosition(), 0);
+			vector<EntityBase*> getLost;
+			std::list<EntityBase*> myList(temp.begin(), temp.end());
+			std::list<EntityBase*>::iterator it2 = myList.begin();
+			while (it2 != myList.end())
+			{
+				if (*it == *it2)
+				{
+					++it2;
+					continue;
+				}
+				if ((*it2)->HasCollider())
+				{
+					Vector3 thatMinAABB, thatMaxAABB;
+					CCollider *it2Collider = dynamic_cast<CCollider*>(*it2);
+					if (CSceneGraph::GetInstance()->GetNode(*it2) != nullptr)
+					{
+						CSceneNode* tempNode = CSceneGraph::GetInstance()->GetNode(*it2);
+						thatMinAABB = tempNode->GetNodeLocalTransform().GetTranslate() + it2Collider->GetMinAABB();
+						thatMaxAABB = tempNode->GetNodeLocalTransform().GetTranslate() + it2Collider->GetMaxAABB();
+					}
+					else
+					{
+						thatMinAABB = (*it2)->GetPosition() + it2Collider->GetMinAABB();
+						thatMaxAABB = (*it2)->GetPosition() + it2Collider->GetMaxAABB();
+					}
+					if (CheckLineSegmentPlane(Laser->GetPosition(),
+						Laser->GetPosition() - Laser->GetDirection() * Laser->GetLength(),
+						thatMinAABB, thatMaxAABB,
+						Vector3(0, 0, 0)) == true)
+					{
+						Laser->SetIsDone(true);
+						if (CSceneGraph::GetInstance()->GetNode(*it2) == nullptr)
+						{
+							getLost.push_back(*it2);
+						}
+						else
+						{
+							CSceneGraph::GetInstance()->DeleteNode(*it2);
+							getLost.push_back(*it2);
+						}
+					}
+				}
+				++it2;
+			}
+			for (std::vector<EntityBase*>::iterator st = getLost.begin(); st != getLost.end(); ++st)
+			{
+				(*st)->SetIsDone(true);
+			}
+			getLost.clear();
+		}
+	}
+	*/
+
 	std::list<EntityBase*>::iterator colliderThis, colliderThisEnd;
 	std::list<EntityBase*>::iterator colliderThat, colliderThatEnd;
 

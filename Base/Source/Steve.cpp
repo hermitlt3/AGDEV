@@ -6,11 +6,12 @@
 #include "GroundEntity.h"
 #include "SceneGraph/SceneNode.h"
 #include "SceneGraph/SceneGraph.h"
+#include "AudioManager.h"
 
 CSteve::CSteve() :
 m_pTerrain(NULL),
 isDead(false),
-m_dSpeed(20.0),
+m_dSpeed(5.0),
 waypointIndex(1),
 currIndex(0),
 target(0, -1000.f, 0)
@@ -73,24 +74,15 @@ GroundEntity* CSteve::GetTerrain(void)
 // Update
 void CSteve::Update(double dt)
 {
-	if (!CSceneGraph::GetInstance()->GetNode(bodyParts[0]) ||
-		!CSceneGraph::GetInstance()->GetNode(bodyParts[1]) ||
-		!CSceneGraph::GetInstance()->GetNode(bodyParts[2]) ||
-		!CSceneGraph::GetInstance()->GetNode(bodyParts[3]) ||
-		!CSceneGraph::GetInstance()->GetNode(bodyParts[4]) ||
-		!CSceneGraph::GetInstance()->GetNode(bodyParts[5]))
-	{
-		isDead = true;
-		CSceneGraph::GetInstance()->DeleteNode(bodyParts[3]);
-	}
-
+	Vector3 p;
 	if (CSceneGraph::GetInstance()->GetNode(bodyParts[3])) {
+		p = CSceneGraph::GetInstance()->GetNode(bodyParts[3])->GetNodeLocalTransform().GetTranslate();
 		if (target.y != -1000.f) {
 			Vector3 movingtowards;
 			movingtowards = (target - CSceneGraph::GetInstance()->GetNode(bodyParts[3])->GetNodeLocalTransform().GetTranslate()).Normalized();
 
 			if (CSceneGraph::GetInstance()->GetNode(bodyParts[3]))
-				CSceneGraph::GetInstance()->GetNode(bodyParts[3])->ApplyTranslate(dt * movingtowards.x * m_dSpeed, 0, dt * movingtowards.z * m_dSpeed);
+				CSceneGraph::GetInstance()->GetNode(bodyParts[3])->ApplyTranslate(dt * movingtowards.x * m_dSpeed, 0, 0);
 		}
 		else
 		{
@@ -121,4 +113,26 @@ void CSteve::Update(double dt)
 
 		}
 	}
+	if (!CSceneGraph::GetInstance()->GetNode(bodyParts[0]) ||
+		!CSceneGraph::GetInstance()->GetNode(bodyParts[1]) ||
+		!CSceneGraph::GetInstance()->GetNode(bodyParts[2]) ||
+		!CSceneGraph::GetInstance()->GetNode(bodyParts[3]) ||
+		!CSceneGraph::GetInstance()->GetNode(bodyParts[4]) ||
+		!CSceneGraph::GetInstance()->GetNode(bodyParts[5]))
+	{
+		if (!isDead)
+		{
+			vec3df pa(p.x, p.y, p.z);
+			pa = pa.normalize() * 3.f;
+			AudioManager::GetInstance()->Sound_Engine->play3D("Music/ZombieDie.mp3", pa, false);
+		}
+
+		isDead = true;
+		CSceneGraph::GetInstance()->DeleteNode(bodyParts[3]);
+	}
+}
+
+void CSteve::Kill()
+{
+	CSceneGraph::GetInstance()->DeleteNode(bodyParts[3]); 
 }

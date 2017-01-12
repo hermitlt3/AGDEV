@@ -1,6 +1,6 @@
 #include "WeaponInfo.h"
 #include "../Projectile/Projectile.h"
-
+#include "../AudioManager.h"
 #include <iostream>
 using namespace std;
 
@@ -180,6 +180,7 @@ void CWeaponInfo::Reload(void)
 			totalRounds = 0;
 		}
 	}
+	AudioManager::GetInstance()->Sound_Engine->play2D("Music/Reload.mp3", false);
 }
 
 // Add rounds

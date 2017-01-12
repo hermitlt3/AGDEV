@@ -10,6 +10,7 @@
 #include "../SpatialPartition/SpatialPartition.h"
 #include "../SceneGraph/SceneGraph.h"
 #include "../AnimationHelper.h"
+#include "../AudioManager.h"
 
 #include <iostream>
 using namespace std;
@@ -50,6 +51,9 @@ void CGrenade::Update(double dt)
 	if (m_fLifetime < 0.0f)
 	{
 		Create::SAnimation("GrenadeExplode", 0, 14, 0, 1.f, true, position + Vector3(0, 15, 0), Vector3(30,30,30), GetSource()->GetPos());
+		vec3df pos(GetSource()->GetPos().x - position.x, GetSource()->GetPos().y - position.y, GetSource()->GetPos().z - position.z);
+		pos = pos.normalize();
+		AudioManager::GetInstance()->Sound_Engine->play3D("Music/Boom.mp3", pos, false);
 		SetStatus(false);
 		SetIsDone(true);	// This method informs EntityManager to remove this instance
 		if (position.x >(CSpatialPartition::GetInstance()->GetxSize() >> 1) ||
@@ -86,6 +90,11 @@ void CGrenade::Update(double dt)
 	{
 		velocity.y = -velocity.y;
 		velocity *= 0.3f;
+		vec3df pos(GetSource()->GetPos().x - position.x, GetSource()->GetPos().y - position.y, GetSource()->GetPos().z - position.z);
+		pos = pos.normalize() * 5.f;
+		//vec3df pos(0, 0, 0);
+		if (velocity.Length() > 0.2f)
+			AudioManager::GetInstance()->Sound_Engine->play3D("Music/GrenadeBounce.mp3", pos, false);
 	}
 	position += velocity * dt;
 	force.SetZero();

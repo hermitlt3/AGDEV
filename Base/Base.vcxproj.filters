@@ -67,6 +67,9 @@
     <Filter Include="Controller">
       <UniqueIdentifier>{8973976a-7631-4648-8ba5-eda5a3384930}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Audio">
+      <UniqueIdentifier>{a1fe727d-59f4-428d-a9c6-9bcc5ea9045b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp">
@@ -192,6 +195,9 @@
     <ClCompile Include="Source\Enemy\Enemy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\AudioManager.cpp">
+      <Filter>Audio</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -313,6 +319,9 @@
     </ClInclude>
     <ClInclude Include="Source\Enemy\Enemy.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\AudioManager.h">
+      <Filter>Audio</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -3,6 +3,7 @@
 #include "MeshBuilder.h"
 #include "../EntityManager.h"
 #include "../BulletfireSprite.h"
+#include "../AudioManager.h"
 
 CLaserBlaster::CLaserBlaster()
 {
@@ -59,6 +60,10 @@ void CLaserBlaster::Discharge(Vector3 position, Vector3 target, CPlayerInfo* _so
 			//aLaser->SetAABB(Vector3(0.5f, 0.5f, 0.5f), Vector3(-0.5f, -0.5f, -0.5f));
 			bFire = false;
 			magRounds--;
+			//vec3df pos(target.x, target.y, target.z);
+			vec3df pos(target.x - position.x, target.y - position.y, target.z - position.z);
+			AudioManager::GetInstance()->Sound_Engine->play3D("Music/RifleShot.mp3", pos, false);
+			//AudioManager::GetInstance()->Sound_Engine->play2D("Music/RifleShot.mp3");
 		}
 	}
 }

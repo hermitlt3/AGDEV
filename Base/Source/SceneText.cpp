@@ -34,6 +34,7 @@
 #include "Steve.h"
 #include "Zombi.h"
 #include "ZGenerator.h"
+#include "AudioManager.h"
 
 #include <iostream>
 using namespace std;
@@ -345,25 +346,36 @@ void SceneText::Init()
 
 	startSGenerate = false;
 	startZGenerate = false;
+	startGame = false;
+	endGame = false;
+	gameTimer = 45.0;
+	winlose = -1;
 }
 
 void SceneText::Update(double dt)
 {
 	std::string type = "";
 	AnimHelper::GetInstance()->UpdateAnimation(dt);
+	zGtr->Update(dt);
 	mill->Update(dt);
-	theZombie->Update(dt);
-	theNPC->Update(dt);
+	if (!theZombie->GetIsDead())
+		theZombie->Update(dt);
+	if (!theNPC->GetIsDead())
+		theNPC->Update(dt);
 	
 	if (theZombie->GetIsDead() && !startZGenerate) {
 		zGtr->SetGenerate(true);
 		type = "stevie";
 		startZGenerate = true;
+		theNPC->Kill();
+		startGame = true;
 	}
 	else if (theNPC->GetIsDead() && !startSGenerate) {
 		zGtr->SetGenerate(true);
 		type = "zombie";
 		startSGenerate = true;
+		theZombie->Kill();
+		startGame = true;
 	}
 	zGtr->GenerateZombies(playerInfo->GetPos(), type);
 
@@ -378,7 +390,34 @@ void SceneText::Update(double dt)
 		fireSprite->ownTimer = fireSprite->stopTimer;
 		fireSprite->isPressed = false;
 	}
+	if (zGtr->IsAllDead() && (theZombie->GetIsDead() || theNPC->GetIsDead()))
+		endGame = true;
 
+	if (startGame && !endGame)
+	{
+		gameTimer -= dt;
+	}
+	if (gameTimer <= 0.0)
+	{
+		if (!endGame)
+		{
+			AudioManager::GetInstance()->BGM->stop();
+			AudioManager::GetInstance()->Sound_Engine->play2D("Music/Lose.mp3", false);
+			endGame = true;
+			gameTimer = 0.0;
+			winlose = 0;
+		}
+	}
+	else
+	{
+		if (endGame)
+		{
+			AudioManager::GetInstance()->BGM->stop();
+			AudioManager::GetInstance()->Sound_Engine->play2D("Music/Win.mp3", false);
+			gameTimer = 0.0;
+			winlose = 1;
+		}
+	}
 	// Update our entities
 	EntityManager::GetInstance()->Update(dt);
 
@@ -476,7 +515,12 @@ void SceneText::Update(double dt)
 
 	std::ostringstream ss1;
 	ss1.precision(4);
-	ss1 << "Player:" << playerInfo->GetPos();
+	if (winlose == -1)
+		ss1 << "Time left: " << gameTimer << " Kill all of them.";
+	if (winlose == 0)
+		ss << "You lose. Noob.";
+	if (winlose == 1)
+		ss << "You win. Gratz!";
 	textObj[2]->SetText(ss1.str());
 }
 

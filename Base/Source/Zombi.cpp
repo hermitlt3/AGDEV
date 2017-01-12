@@ -6,12 +6,13 @@
 #include "GroundEntity.h"
 #include "SceneGraph/SceneNode.h"
 #include "SceneGraph/SceneGraph.h"
+#include "AudioManager.h"
 
 CZombie::CZombie() :
 m_pTerrain(NULL),
 legless(false),
 isDead(false),
-m_dSpeed(20.0),
+m_dSpeed(5.0),
 waypointIndex(1),
 currIndex(0),
 target(Vector3(0, -1000, 0))
@@ -74,6 +75,7 @@ GroundEntity* CZombie::GetTerrain(void)
 // Update
 void CZombie::Update(double dt)
 {
+	Vector3 p;
 	if (!CSceneGraph::GetInstance()->GetNode(bodyParts[4]) &&
 		!CSceneGraph::GetInstance()->GetNode(bodyParts[5]))
 	{
@@ -84,18 +86,16 @@ void CZombie::Update(double dt)
 			legless = true;
 		}
 	}
-	if (!CSceneGraph::GetInstance()->GetNode(bodyParts[3]))
-	{
-		isDead = true;
-	}
+	
 
 	if (CSceneGraph::GetInstance()->GetNode(bodyParts[3])) {
+		p = CSceneGraph::GetInstance()->GetNode(bodyParts[3])->GetNodeLocalTransform().GetTranslate();
 		if (target.y != -1000.f) {
 			Vector3 movingtowards;
 			movingtowards = (target - CSceneGraph::GetInstance()->GetNode(bodyParts[3])->GetNodeLocalTransform().GetTranslate()).Normalized();
 
 			if (CSceneGraph::GetInstance()->GetNode(bodyParts[3]))
-				CSceneGraph::GetInstance()->GetNode(bodyParts[3])->ApplyTranslate(dt * movingtowards.x * m_dSpeed, 0, dt * movingtowards.z * m_dSpeed);
+				CSceneGraph::GetInstance()->GetNode(bodyParts[3])->ApplyTranslate(dt * movingtowards.x * m_dSpeed, 0, 0);
 		}
 		else
 		{
@@ -125,4 +125,19 @@ void CZombie::Update(double dt)
 				CSceneGraph::GetInstance()->GetNode(bodyParts[3])->ApplyTranslate(dt * movingtowards.x * m_dSpeed, 0, dt * movingtowards.z * m_dSpeed);
 		}
 	}
+	else
+	{
+		if (!isDead)
+		{
+			vec3df pa(p.x, p.y, p.z);
+			pa = pa.normalize() * 3.f;
+			AudioManager::GetInstance()->Sound_Engine->play3D("Music/ZombieDie.mp3", pa, false);
+		}
+		isDead = true;
+	}
+}
+
+void CZombie::Kill()
+{
+	 CSceneGraph::GetInstance()->DeleteNode(bodyParts[3]);
 }

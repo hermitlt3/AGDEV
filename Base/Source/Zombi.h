@@ -32,6 +32,7 @@ public:
 	}
 
 	void SetTarget(Vector3 target) { this->target = target; }
+	void Kill();
 private:
 	GroundEntity* m_pTerrain;
 	GenericEntity* bodyParts[6];

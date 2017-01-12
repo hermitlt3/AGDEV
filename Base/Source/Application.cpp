@@ -3,6 +3,7 @@
 #include "KeyboardController.h"
 #include "SceneManager.h"
 #include "GraphicsManager.h"
+#include "AudioManager.h"
 
 //Include GLEW
 #include <GL/glew.h>
@@ -106,6 +107,7 @@ void Application::Init()
 
 	// Init systems
 	GraphicsManager::GetInstance()->Init();
+	AudioManager::GetInstance()->Init();
 }
 
 void Application::Run()
@@ -129,6 +131,7 @@ void Application::Run()
 		PostInputUpdate();
 	}
 	SceneManager::GetInstance()->Exit();
+	AudioManager::GetInstance()->Destroy();
 }
 
 void Application::Exit()
