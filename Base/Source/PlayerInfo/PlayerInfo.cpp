@@ -64,7 +64,7 @@ void CPlayerInfo::Init(void)
 	minBoundary.Set(-1, -1, -1);
 
 	// Set the pistol as the primary weapon
-	primaryWeapon = new CLaserBlaster();
+	primaryWeapon = new CPistol();
 	primaryWeapon->Init();
 	// Set the laser blaster as the secondary weapon
 	//secondaryWeapon = new CLaserBlaster();

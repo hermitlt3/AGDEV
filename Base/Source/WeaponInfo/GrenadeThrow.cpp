@@ -52,7 +52,7 @@ void CGrenadeThrow::Discharge(Vector3 position, Vector3 target, CPlayerInfo* _so
 			aProjectile->SetCollider(true);
 			aProjectile->SetAABB(Vector3(0.5f, 0.5f, 0.5f), Vector3(-0.5f, -0.5f, -0.5f));
 			aProjectile->SetDirection(target - position);
-			aProjectile->SetForce((target - position) * 30000.f);
+			aProjectile->SetForce((target - position) * 50000.f);
 			aProjectile->SetMass(20.f);
 			aProjectile->SetAcceleration(aProjectile->GetForce() * (1.f / aProjectile->GetMass()));
 			bFire = false;

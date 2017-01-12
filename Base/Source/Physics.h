@@ -33,7 +33,7 @@ protected:
 	Vector3 direction;
 
 	float mass;
-	const float IN_GAME_GRAVITY = -980.f;
+	const float IN_GAME_GRAVITY = -9.8f;
 
 private:
 	Physics();

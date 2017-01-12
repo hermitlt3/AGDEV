@@ -347,7 +347,7 @@ bool EntityManager::CheckForCollision(double dt)
 {
 	for (std::list<EntityBase*>::iterator it = entityList.begin(); it != entityList.end(); ++it)
 	{
-		if ((*it)->GetIsLaser())
+		/*if ((*it)->GetIsLaser())
 		{
 			CLaser* Laser = dynamic_cast<CLaser*>(*it);
 			if (Laser->GetPosition().x > (CSpatialPartition::GetInstance()->GetxSize() >> 1) ||
@@ -362,7 +362,7 @@ bool EntityManager::CheckForCollision(double dt)
 			{
 				if (*it == *it2)
 					continue;
-				if ((*it2)->HasCollider())
+				if ((*it2) && (*it2)->HasCollider())
 				{
 					Vector3 thatMinAABB, thatMaxAABB;
 					CCollider *it2Collider = dynamic_cast<CCollider*>(*it2);
@@ -392,7 +392,7 @@ bool EntityManager::CheckForCollision(double dt)
 			}
 		}
 		
-		else if ((*it)->HasCollider())
+		else*/ if ((*it)->HasCollider())
 		{
 			vector<EntityBase*> temp;
 			if(CSceneGraph::GetInstance()->GetNode(*it) == nullptr)
@@ -413,34 +413,44 @@ bool EntityManager::CheckForCollision(double dt)
 					continue;
 				temp = CSpatialPartition::GetInstance()->GetObjects(CSceneGraph::GetInstance()->GetNode(*it)->GetNodeLocalTransform().GetTranslate(), 0);
 			}
-			
-			for (std::vector<EntityBase*>::iterator it2 = temp.begin(); it2 != temp.end(); ++it2)
+
+			for (std::vector<EntityBase*>::iterator it2 = temp.begin(); it2 != temp.end();)
 			{
 				if ((*it2) == (*it))
-					continue;
-				if ((*it2) && (*it2)->HasCollider())
 				{
-					//if (CheckSphereCollision(*it, *it2))
-					//{
-						if (CheckAABBCollision(*it, *it2))
+					++it2;
+					continue;
+				}
+				if ((*it2)->HasCollider())
+				{
+					if (CheckAABBCollision(*it, *it2))
+					{
+						CProjectile* p = dynamic_cast<CProjectile*>(*it);
+						if (p)
 						{
-							CProjectile* p = dynamic_cast<CProjectile*>(*it);
-							CCollider* c = dynamic_cast<CCollider*>(*it2);
-							if (p)
+							if (p->GetType() != GRENADE)
 							{
-								if (p->GetType() == LAUNCHER) 
-									p->SetIsDone(true);
-								if (p->GetType() != GRENADE)
+								p->SetIsDone(true);
+								if (CSceneGraph::GetInstance()->GetNode(*it2) == nullptr)
 								{
-									if (CSceneGraph::GetInstance()->GetNode(*it2) == nullptr)
-										(*it2)->SetIsDone(true);
-									else
-										CSceneGraph::GetInstance()->DeleteNode(*it2);
+									(*it2)->SetIsDone(true);
+									it2 = temp.erase(it2);
+								}
+								else
+								{
+									CSceneGraph::GetInstance()->DeleteNode(*it2);
+									++it2;
 								}
 							}
 						}
-					//}
+						else
+							++it2;
+					}
+					else
+						++it2;
 				}
+				else
+					++it2;
 			}
 		}
 	}

@@ -5,6 +5,7 @@
 #include "RenderHelper.h"
 #include "../LevelOfDetails/LevelOfDetails.h"
 #include "../SceneGraph/SceneGraph.h"
+
 template <typename T> vector<T> concat(vector<T> &a, vector<T> &b) {
 	vector<T> ret = vector<T>();
 	copy(a.begin(), a.end(), back_inserter(ret));

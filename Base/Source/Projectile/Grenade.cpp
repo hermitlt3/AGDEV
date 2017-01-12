@@ -77,7 +77,7 @@ void CGrenade::Update(double dt)
 	}
 	Vector3 horizontalForce;
 	// W = F * m
-	force.y += IN_GAME_GRAVITY * mass;
+	force.y = IN_GAME_GRAVITY * mass;
 
 	//v = u + at
 	acceleration = force * (1.f / mass);
