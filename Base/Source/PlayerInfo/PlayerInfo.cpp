@@ -322,7 +322,7 @@ void CPlayerInfo::Update(double dt)
 			position += rightUV * (float)m_dSpeed * (float)dt;
 		}
 		// Constrain the position
-		//Constrain();
+		Constrain();
 		// Update the target
 		target = position + viewVector;
 	}
