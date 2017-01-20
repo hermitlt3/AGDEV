@@ -34,6 +34,6 @@ public:
 	int getIntValue(const std::string& name);
 	float getFloatValue(const std::string& name);
 
-	bool saveIntValue(const std::string& newName, const int& value, const bool& bOverwrite);
-	bool saveFloatValue(const std::string& newName, const float& value, const bool& bOverwrite);
+	bool saveIntValue(const std::string& newName, const int& value, const bool& bOverwrite = false);
+	bool saveFloatValue(const std::string& newName, const float& value, const bool& bOverwrite = false);
 };

@@ -87,7 +87,7 @@ bool CLuaInterface::saveFloatValue(const std::string& name, const float& value, 
 {
 	lua_getglobal(theLuaState, "SaveToLuaFile");
 	char outputString[80];
-	sprintf(outputString, "%s = %6.4f\n", name, value);
+	sprintf(outputString, "%s = %6.4f\n", name.c_str(), value);
 	lua_pushstring(theLuaState, outputString);
 	lua_pushinteger(theLuaState, bOverwrite);
 	lua_call(theLuaState, 2, 0);
@@ -99,7 +99,7 @@ bool CLuaInterface::saveIntValue(const std::string& name, const int& value, cons
 {
 	lua_getglobal(theLuaState, "SaveToLuaFile");
 	char outputString[80];
-	sprintf(outputString, "%s = %d\n", name, value);
+	sprintf(outputString, "%s = %d\n", name.c_str(), value);
 	lua_pushstring(theLuaState, outputString);
 	lua_pushinteger(theLuaState, bOverwrite);
 	lua_call(theLuaState, 2, 0);
